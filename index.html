@@ -1,117 +1,148 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Kalpana Skin Clinic - Advanced Checker</title>
-  <style>
-    body {
-      font-family: Arial;
-      background: #0f172a;
-      color: white;
-      padding: 20px;
-      text-align: center;
-    }
+<title>Kalpana Skin Clinic - Smart Diagnosis</title>
 
-    input, select, button {
-      width: 90%;
-      padding: 10px;
-      margin: 8px;
-      border-radius: 8px;
-      border: none;
-    }
+<style>
+body {
+  font-family: Arial;
+  background: linear-gradient(135deg, #0f172a, #1e3a8a);
+  color: white;
+  padding: 20px;
+}
 
-    .section {
-      background: #1e293b;
-      padding: 10px;
-      border-radius: 10px;
-      margin: 10px;
-      text-align: left;
-    }
+h2 {
+  text-align: center;
+}
 
-    button {
-      background: #38bdf8;
-      font-weight: bold;
-      cursor: pointer;
-    }
+.container {
+  max-width: 900px;
+  margin: auto;
+}
 
-    .modal {
-      display: none;
-      position: fixed;
-      top:0; left:0;
-      width:100%; height:100%;
-      background: rgba(0,0,0,0.8);
-      justify-content:center;
-      align-items:center;
-    }
+input, select, button {
+  width: 100%;
+  padding: 10px;
+  margin: 8px 0;
+  border-radius: 8px;
+  border: none;
+}
 
-    .modal-content {
-      background:white;
-      color:black;
-      padding:20px;
-      border-radius:10px;
-      width:90%;
-      max-width:400px;
-    }
-  </style>
+.section {
+  background: #1e293b;
+  padding: 15px;
+  border-radius: 12px;
+  margin-top: 10px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+button {
+  background: linear-gradient(90deg, #38bdf8, #0ea5e9);
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  top:0; left:0;
+  width:100%; height:100%;
+  background: rgba(0,0,0,0.8);
+  justify-content:center;
+  align-items:center;
+}
+
+.modal-content {
+  background:white;
+  color:black;
+  padding:20px;
+  border-radius:12px;
+  width:90%;
+  max-width:500px;
+}
+</style>
 </head>
 
 <body>
 
-<h2>🧠 Kalpana Skin Clinic - Smart Diagnosis</h2>
+<div class="container">
+
+<h2>🧠 Kalpana Skin Clinic</h2>
 
 <input type="text" id="name" placeholder="Name">
 <input type="number" id="age" placeholder="Age">
 
 <select id="gender">
-  <option value="">Gender</option>
-  <option>Male</option>
-  <option>Female</option>
+<option>Gender</option>
+<option>Male</option>
+<option>Female</option>
 </select>
 
-<!-- EXTRA QUESTIONS -->
+<select id="location">
+<option value="">Body Location</option>
+<option value="face">Face</option>
+<option value="hands">Hands</option>
+<option value="legs">Legs</option>
+<option value="feet">Feet</option>
+<option value="full">Full Body</option>
+</select>
+
 <select id="duration">
-  <option value="">Duration</option>
-  <option value="short">1-3 days</option>
-  <option value="medium">1-2 weeks</option>
-  <option value="long">More than 2 weeks</option>
+<option value="">Duration</option>
+<option value="short">1-3 days</option>
+<option value="medium">1-2 weeks</option>
+<option value="long">More than 2 weeks</option>
 </select>
 
-<select id="spread">
-  <option value="">Area Spread</option>
-  <option value="small">Small area</option>
-  <option value="medium">Moderate</option>
-  <option value="large">Large area</option>
-</select>
-
-<select id="severityLevel">
-  <option value="">Severity Level</option>
-  <option value="low">Mild</option>
-  <option value="medium">Moderate</option>
-  <option value="high">Severe</option>
+<select id="severity">
+<option value="">Severity</option>
+<option value="low">Mild</option>
+<option value="medium">Moderate</option>
+<option value="high">Severe</option>
 </select>
 
 <!-- SYMPTOMS -->
 <div class="section">
-  <h3>Symptoms</h3>
-  <label><input type="checkbox" value="itch"> Itching</label>
-  <label><input type="checkbox" value="dry"> Dry skin</label>
-  <label><input type="checkbox" value="redness"> Redness</label>
-  <label><input type="checkbox" value="pimple"> Pimples</label>
-  <label><input type="checkbox" value="blackhead"> Blackheads</label>
-  <label><input type="checkbox" value="pus"> Pus</label>
-  <label><input type="checkbox" value="ring"> Ring patch</label>
-  <label><input type="checkbox" value="scaling"> Scaling</label>
-  <label><input type="checkbox" value="dark"> Dark spots</label>
-</div>
+<h3>Symptoms</h3>
 
-<input type="file" id="image" accept="image/*">
+<div class="grid">
+
+<label><input type="checkbox" value="itch"> Itching</label>
+<label><input type="checkbox" value="dry"> Dry skin</label>
+<label><input type="checkbox" value="redness"> Redness</label>
+
+<label><input type="checkbox" value="pimple"> Pimples</label>
+<label><input type="checkbox" value="blackhead"> Blackheads</label>
+<label><input type="checkbox" value="pus"> Pus</label>
+
+<label><input type="checkbox" value="ring"> Ring patch</label>
+<label><input type="checkbox" value="scaling"> Scaling</label>
+<label><input type="checkbox" value="dark"> Dark spots</label>
+
+</div>
+</div>
 
 <button onclick="analyze()">Analyze</button>
 
+</div>
+
+<!-- RESULT -->
 <div id="popup" class="modal">
-  <div class="modal-content">
-    <div id="result"></div>
-    <button onclick="closePopup()">Close</button>
-  </div>
+<div class="modal-content" id="resultBox">
+<div id="result"></div>
+<button onclick="closePopup()">Close</button>
+</div>
 </div>
 
 <script>
@@ -123,81 +154,109 @@ function getSymptoms(){
 
 function analyze(){
 
-  const symptoms = getSymptoms();
-  const duration = document.getElementById("duration").value;
-  const spread = document.getElementById("spread").value;
-  const severityInput = document.getElementById("severityLevel").value;
+let symptoms = getSymptoms();
+let location = document.getElementById("location").value;
+let duration = document.getElementById("duration").value;
+let severity = document.getElementById("severity").value;
 
-  // SCORE SYSTEM
-  let scores = {
-    eczema: 0,
-    acne: 0,
-    fungal: 0,
-    bacterial: 0,
-    pigmentation: 0
-  };
+let scores = {
+  eczema:0,
+  acne:0,
+  fungal:0,
+  bacterial:0,
+  pigmentation:0
+};
 
-  // SYMPTOM SCORING
+symptoms.forEach(s=>{
+  if(["itch","dry","redness"].includes(s)) scores.eczema+=2;
+  if(["pimple","blackhead"].includes(s)) scores.acne+=2;
+  if(["ring","scaling"].includes(s)) scores.fungal+=3;
+  if(["pus"].includes(s)) scores.bacterial+=3;
+  if(["dark"].includes(s)) scores.pigmentation+=2;
+});
 
-  symptoms.forEach(s => {
-    if(["itch","dry","redness"].includes(s)) scores.eczema += 2;
-    if(["pimple","blackhead"].includes(s)) scores.acne += 2;
-    if(["ring","scaling"].includes(s)) scores.fungal += 3;
-    if(["pus"].includes(s)) scores.bacterial += 3;
-    if(["dark"].includes(s)) scores.pigmentation += 2;
-  });
+// LOCATION LOGIC
+if(location==="face") scores.acne+=2;
+if(location==="feet") scores.fungal+=2;
 
-  // EXTRA FACTORS
+// DURATION
+if(duration==="long") scores.fungal+=1;
 
-  if(duration === "long") {
-    scores.fungal += 1;
-    scores.pigmentation += 1;
-  }
+// SEVERITY
+if(severity==="high") scores.bacterial+=2;
 
-  if(spread === "large") {
-    scores.eczema += 1;
-    scores.fungal += 1;
-  }
+let disease = Object.keys(scores).reduce((a,b)=>scores[a]>scores[b]?a:b);
 
-  if(severityInput === "high") {
-    scores.bacterial += 2;
-  }
+let data = {
+eczema:{
+name:"Eczema / Allergy",
+advice:"Use moisturizer and avoid irritants",
+precaution:"Keep skin hydrated, avoid scratching",
+avoid:"Harsh soaps, dust",
+cure:"1-2 weeks"
+},
+acne:{
+name:"Acne",
+advice:"Clean face regularly",
+precaution:"Drink water, maintain hygiene",
+avoid:"Oily food, touching face",
+cure:"1-2 weeks"
+},
+fungal:{
+name:"Fungal Infection",
+advice:"Keep area dry",
+precaution:"Wear loose clothes",
+avoid:"Sweating, moisture",
+cure:"2-3 weeks"
+},
+bacterial:{
+name:"Bacterial Infection",
+advice:"Consult doctor",
+precaution:"Keep area clean",
+avoid:"Squeezing",
+cure:"1-2 weeks"
+},
+pigmentation:{
+name:"Pigmentation",
+advice:"Use sunscreen",
+precaution:"Avoid sunlight",
+avoid:"Heat exposure",
+cure:"3-6 weeks"
+}
+};
 
-  // FIND MAX
-  let disease = Object.keys(scores).reduce((a, b) => scores[a] > scores[b] ? a : b);
+let docAdvice = severity==="high" ? "⚠️ Visit doctor immediately" :
+                 severity==="medium" ? "Consult doctor if persists" :
+                 "Home care is sufficient";
 
-  let resultText = "";
+let d = data[disease];
 
-  switch(disease){
-    case "eczema":
-      resultText = "Eczema / Allergy";
-      break;
-    case "acne":
-      resultText = "Acne";
-      break;
-    case "fungal":
-      resultText = "Fungal Infection";
-      break;
-    case "bacterial":
-      resultText = "Bacterial Infection";
-      break;
-    case "pigmentation":
-      resultText = "Pigmentation";
-      break;
-  }
+document.getElementById("result").innerHTML = `
+<h3>Diagnosis Report</h3>
 
-  document.getElementById("result").innerHTML = `
-  <h3>Result</h3>
-  <p><b>Condition:</b> ${resultText}</p>
-  <p><b>Confidence Score:</b> ${scores[disease]}</p>
-  <p>⚠️ This is not a medical diagnosis.</p>
-  `;
+<p><b>Condition:</b> ${d.name}</p>
+<p><b>Severity:</b> ${severity}</p>
+<p><b>Recovery Time:</b> ${d.cure}</p>
 
-  document.getElementById("popup").style.display = "flex";
+<hr>
+
+<p><b>Advice:</b> ${d.advice}</p>
+<p><b>Precautions:</b> ${d.precaution}</p>
+<p><b>Avoid:</b> ${d.avoid}</p>
+
+<hr>
+
+<p><b>When to see doctor:</b> ${docAdvice}</p>
+<p><b>Confidence:</b> ${scores[disease]}</p>
+
+<p style="color:red;">⚠️ Not a medical diagnosis</p>
+`;
+
+document.getElementById("popup").style.display="flex";
 }
 
 function closePopup(){
-  document.getElementById("popup").style.display = "none";
+document.getElementById("popup").style.display="none";
 }
 
 </script>
