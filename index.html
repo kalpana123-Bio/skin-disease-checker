@@ -1,30 +1,36 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Skin Checker</title>
-  <title>Kalpana skin Clinic - Skin Checker</title>
-<style>
-body {
-font-family: Arial;
-text-align: center;
-      background: #1e293b;
+  <title>Kalpana Skin Clinic - Skin Disease Checker</title>
+  <style>
+    body {
+      font-family: Arial;
+      text-align: center;
       background: #0f172a;
-color: white;
-padding: 20px;
-}
-@@ -26,26 +26,56 @@
-}
+      color: white;
+      padding: 20px;
+    }
 
-img {
-      max-width: 250px;
+    input, textarea, select, button {
+      width: 90%;
+      padding: 10px;
+      margin: 10px;
+      border-radius: 8px;
+      border: none;
+    }
+
+    button {
+      background: #38bdf8;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    img {
       max-width: 200px;
-margin-top: 10px;
-border-radius: 10px;
-}
+      margin-top: 10px;
+      border-radius: 10px;
+    }
 
-    #prescription {
-      margin-top: 20px;
-    /* Modal */
     .modal {
       display: none;
       position: fixed;
@@ -38,16 +44,14 @@ border-radius: 10px;
     }
 
     .modal-content {
-background: white;
-color: black;
-padding: 20px;
-      border-radius: 10px;
+      background: white;
+      color: black;
+      padding: 20px;
       border-radius: 12px;
       width: 90%;
       max-width: 400px;
-text-align: left;
-      white-space: pre-wrap;
-}
+      text-align: left;
+    }
 
     .header {
       text-align: center;
@@ -64,29 +68,36 @@ text-align: left;
       font-size: 14px;
       margin-top: 5px;
     }
-
-</style>
+  </style>
 </head>
 
 <body>
 
-<h2>🧠 Skin Disease Checker</h2>
-<h2>🧠 Kalpana skin Clinic</h2>
+<h2>🧠 Kalpana Skin Clinic</h2>
 
 <input type="file" id="image" accept="image/*">
 <img id="preview">
-@@ -63,83 +93,90 @@ <h2>🧠 Skin Disease Checker</h2>
+
+<input type="text" id="name" placeholder="Name">
+<input type="number" id="age" placeholder="Age">
+
+<select id="gender">
+  <option value="">Select Gender</option>
+  <option>Male</option>
+  <option>Female</option>
+</select>
+
+<textarea id="symptoms" placeholder="Enter symptoms (itching, redness, acne, pus, dry skin, swelling, dark spots, burning...)"></textarea>
 
 <button onclick="analyze()">Generate Prescription</button>
 
-<div id="prescription"></div>
 <!-- Modal -->
 <div id="popup" class="modal">
   <div class="modal-content" id="prescriptionBox">
 
     <div class="header">
-      <div class="logo">🏥 Kalpana skin Clinic</div>
-      <div class="doctor">Dr. Kalpana p</div>
+      <div class="logo">🏥 Kalpana Skin Clinic</div>
+      <div class="doctor">Dr. Kalpana P</div>
     </div>
 
     <div id="prescriptionText"></div>
@@ -100,119 +111,121 @@ text-align: left;
 
 <script>
 
-// Image Preview
-document.getElementById("image").addEventListener("change", function() {
-// Preview
+// Preview image
 image.addEventListener("change", function() {
-const file = this.files[0];
-const reader = new FileReader();
-
-  reader.onload = function(e) {
-    document.getElementById("preview").src = e.target.result;
-  };
-
-  if (file) reader.readAsDataURL(file);
+  const file = this.files[0];
+  const reader = new FileReader();
   reader.onload = e => preview.src = e.target.result;
   if(file) reader.readAsDataURL(file);
 });
 
-// Analyze
 function analyze() {
-const name = document.getElementById("name").value;
-const age = document.getElementById("age").value;
-const gender = document.getElementById("gender").value;
-const symptoms = document.getElementById("symptoms").value.toLowerCase();
 
-  let disease = "Unknown condition";
-  let advice = "Consult a dermatologist.";
-  let medicine = "N/A";
+  const name = document.getElementById("name").value;
+  const age = document.getElementById("age").value;
+  const gender = document.getElementById("gender").value;
+  const symptoms = document.getElementById("symptoms").value.toLowerCase();
+
   let disease = "Unknown";
   let severity = "Low";
-  let cureTime = "3-5 days";
-  let advice = "Consult doctor";
+  let cureTime = "Consult doctor";
+  let advice = "Consult a dermatologist";
 
-  if (symptoms.includes("itch") || symptoms.includes("rash")) {
-    disease = "Eczema / Skin Allergy";
-    advice = "Keep skin moisturized and avoid irritants.";
-    medicine = "Moisturizing cream (OTC)";
-  if(symptoms.includes("itch") || symptoms.includes("rash")){
+  const s = symptoms;
+
+  // ECZEMA / ALLERGY
+  if (
+    s.includes("itch") || s.includes("itching") ||
+    s.includes("rash") || s.includes("redness") ||
+    s.includes("swelling") || s.includes("dry") ||
+    s.includes("flaky") || s.includes("irritation") ||
+    s.includes("burning")
+  ){
     disease = "Eczema / Allergy";
     severity = "Medium";
     cureTime = "1-2 weeks";
-    advice = "Use moisturizer and avoid irritants";
-}
+    advice = "Use moisturizer, avoid allergens, use mild soap";
+  }
 
-  else if (symptoms.includes("pimple") || symptoms.includes("acne")) {
-  else if(symptoms.includes("acne") || symptoms.includes("pimple")){
-disease = "Acne";
-    advice = "Wash face regularly and avoid oily products.";
-    medicine = "Salicylic acid face wash (OTC)";
+  // ACNE
+  else if (
+    s.includes("acne") || s.includes("pimple") ||
+    s.includes("blackhead") || s.includes("whitehead") ||
+    s.includes("oil") || s.includes("oily skin") ||
+    s.includes("pus") || s.includes("zits")
+  ){
+    disease = "Acne";
     severity = "Low";
     cureTime = "1-2 weeks";
-    advice = "Keep skin clean, avoid oil products";
-}
+    advice = "Keep skin clean, avoid oily products, drink water";
+  }
 
-  else if (symptoms.includes("patch") || symptoms.includes("white")) {
-  else if(symptoms.includes("patch") || symptoms.includes("white")){
-disease = "Fungal Infection";
-    advice = "Keep area dry and clean.";
-    medicine = "Antifungal cream (OTC)";
+  // FUNGAL
+  else if (
+    s.includes("patch") || s.includes("white") ||
+    s.includes("ring") || s.includes("circle") ||
+    s.includes("fungal") || s.includes("scaling") ||
+    s.includes("peeling") || s.includes("crack")
+  ){
+    disease = "Fungal Infection";
     severity = "Medium";
     cureTime = "2-3 weeks";
-    advice = "Keep area dry and clean";
-}
+    advice = "Keep area dry, use antifungal cream";
+  }
 
-  const prescription = `
-🧾 DIGITAL PRESCRIPTION
+  // BACTERIAL
+  else if (
+    s.includes("pain") || s.includes("pus") ||
+    s.includes("yellow") || s.includes("discharge") ||
+    s.includes("boil") || s.includes("abscess")
+  ){
+    disease = "Bacterial Infection";
+    severity = "High";
+    cureTime = "1-2 weeks";
+    advice = "Do not squeeze, keep clean, consult doctor immediately";
+  }
 
-Patient Name: ${name}
-Age: ${age}
-Gender: ${gender}
+  // PIGMENTATION
+  else if (
+    s.includes("dark") || s.includes("pigment") ||
+    s.includes("spots") || s.includes("tan") ||
+    s.includes("uneven")
+  ){
+    disease = "Pigmentation";
+    severity = "Low";
+    cureTime = "3-4 weeks";
+    advice = "Use sunscreen, avoid sun exposure";
+  }
 
-----------------------------------
   const text = `
 Patient: ${name}
 Age: ${age} | Gender: ${gender}
 
-Possible Condition:
-${disease}
 Condition: ${disease}
 Severity: ${severity}
 Estimated Recovery: ${cureTime}
 
-----------------------------------
-
-Recommended Care:
 Advice:
 ${advice}
 
-----------------------------------
-
-Suggested OTC Medicine:
-${medicine}
-
-----------------------------------
 ⚠️ This is not a medical diagnosis.
 Consult a certified doctor.
 `;
 
-⚠️ Note:
-This is NOT a medical diagnosis.
-Please consult a qualified doctor.
   document.getElementById("prescriptionText").innerText = text;
   document.getElementById("popup").style.display = "flex";
 }
 
-👨‍⚕️ - AI Health Assistant
-`;
 function closePopup(){
   document.getElementById("popup").style.display = "none";
 }
 
-  document.getElementById("prescription").innerText = prescription;
 function downloadPDF(){
   const element = document.getElementById("prescriptionBox");
   html2pdf().from(element).save("Prescription.pdf");
 }
 
 </script>
+
+</body>
+</html>
