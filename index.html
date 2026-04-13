@@ -7,77 +7,97 @@
 
 <style>
 
+/* BACKGROUND */
 body {
-  font-family: 'Segoe UI';
-  background: linear-gradient(135deg,#1e3a8a,#0f172a);
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg,#0f172a,#1e3a8a);
   color:white;
+  margin:0;
   padding:20px;
 }
 
-/* MAIN CARD */
+/* CONTAINER */
 .container {
-  max-width:850px;
+  max-width:900px;
   margin:auto;
-  background:#2b3f73;
-  padding:25px;
+  background:rgba(255,255,255,0.08);
+  backdrop-filter: blur(10px);
+  padding:20px;
   border-radius:15px;
-  animation:fadeIn 0.5s ease;
+  box-shadow:0 8px 30px rgba(0,0,0,0.5);
+  animation: fadeIn 0.8s ease;
 }
 
-/* HEADINGS CENTER FIX */
-h2, h3 {
-  text-align:center;
-}
+h2 { text-align:center; }
 
-/* INPUT */
+/* INPUTS */
 input, select {
   width:100%;
   padding:12px;
   margin:10px 0;
   border-radius:10px;
   border:none;
+  outline:none;
 }
 
 /* BUTTON */
 button {
   width:100%;
   padding:12px;
+  margin-top:10px;
   border-radius:10px;
   border:none;
+  font-weight:bold;
+  cursor:pointer;
   background:linear-gradient(90deg,#38bdf8,#06b6d4);
   color:white;
-  cursor:pointer;
-  font-weight:bold;
   transition:0.3s;
 }
 
 button:hover {
   transform:scale(1.03);
+  box-shadow:0 0 15px #38bdf8;
 }
 
-/* PERFECT GRID */
+/* SYMPTOMS GRID */
 .symptom-grid {
   display:grid;
-  grid-template-columns:repeat(2,1fr);
+  grid-template-columns: repeat(2,1fr);
   gap:12px;
 }
 
-/* PERFECT ALIGNMENT */
 .symptom-item {
   display:flex;
-  justify-content:space-between;
   align-items:center;
-  padding:12px;
-  background:#3d568a;
+  gap:10px;
+  padding:10px;
+  background:rgba(255,255,255,0.08);
   border-radius:10px;
+  transition:0.3s;
+}
+
+.symptom-item:hover {
+  background:#38bdf8;
+}
+
+.symptom-item input {
+  width:18px;
+  height:18px;
+}
+
+/* MOBILE */
+@media(max-width:600px){
+  .symptom-grid{
+    grid-template-columns:1fr;
+  }
 }
 
 /* MODAL */
 .modal {
   display:none;
   position:fixed;
-  width:100%;
-  height:100%;
+  top:0; left:0;
+  width:100%; height:100%;
   background:rgba(0,0,0,0.8);
   justify-content:center;
   align-items:center;
@@ -90,20 +110,32 @@ button:hover {
   border-radius:12px;
   width:90%;
   max-width:600px;
-  animation:scaleUp 0.4s ease;
+  animation: scaleUp 0.4s ease;
 }
 
-/* CARD */
-.patient-card {
-  background:#f1f5f9;
-  padding:15px;
-  border-radius:10px;
-  margin:10px 0;
+.center { text-align:center; }
+
+/* GRAPH */
+.bar {
+  height:10px;
+  background:#38bdf8;
+  margin:5px 0;
+  border-radius:5px;
 }
 
-/* ANIMATION */
+/* LOGIN */
+.login {
+  max-width:400px;
+  margin:auto;
+  margin-top:100px;
+  background:rgba(255,255,255,0.1);
+  padding:20px;
+  border-radius:12px;
+}
+
+/* ANIMATIONS */
 @keyframes fadeIn {
-  from{opacity:0;}
+  from{opacity:0; transform:translateY(20px);}
   to{opacity:1;}
 }
 
@@ -112,7 +144,7 @@ button:hover {
   to{transform:scale(1);}
 }
 
-.hidden {display:none;}
+.hidden { display:none; }
 
 </style>
 </head>
@@ -120,7 +152,7 @@ button:hover {
 <body>
 
 <!-- LOGIN -->
-<div id="loginPage" class="container">
+<div id="loginPage" class="login">
 <h2>👨‍⚕️ Doctor Login</h2>
 
 <input id="username" placeholder="👤 Username">
@@ -140,53 +172,57 @@ button:hover {
 
 <select id="location">
 <option value="">📍 Body Location</option>
-<option>Face</option>
-<option>Hands</option>
-<option>Legs</option>
-<option>Feet</option>
+<option value="face">Face</option>
+<option value="feet">Feet</option>
+<option value="body">Full Body</option>
 </select>
 
 <select id="severity">
 <option value="">⚠️ Severity</option>
-<option>Mild</option>
-<option>Moderate</option>
-<option>Severe</option>
+<option value="low">Mild</option>
+<option value="medium">Moderate</option>
+<option value="high">Severe</option>
 </select>
 
 <h3>🩺 Symptoms</h3>
 
 <div class="symptom-grid">
 
-<div class="symptom-item">Itching <input type="checkbox" value="itch"></div>
-<div class="symptom-item">Dry Skin <input type="checkbox" value="dry"></div>
+<div class="symptom-item"><input type="checkbox" value="itch"> Itching</div>
+<div class="symptom-item"><input type="checkbox" value="dry"> Dry Skin</div>
 
-<div class="symptom-item">Redness <input type="checkbox" value="redness"></div>
-<div class="symptom-item">Pimples <input type="checkbox" value="pimple"></div>
+<div class="symptom-item"><input type="checkbox" value="redness"> Redness</div>
+<div class="symptom-item"><input type="checkbox" value="pimple"> Pimples</div>
 
-<div class="symptom-item">Blackheads <input type="checkbox" value="blackhead"></div>
-<div class="symptom-item">Pus <input type="checkbox" value="pus"></div>
+<div class="symptom-item"><input type="checkbox" value="blackhead"> Blackheads</div>
+<div class="symptom-item"><input type="checkbox" value="pus"> Pus</div>
 
-<div class="symptom-item">Ring Patch <input type="checkbox" value="ring"></div>
-<div class="symptom-item">Scaling <input type="checkbox" value="scaling"></div>
+<div class="symptom-item"><input type="checkbox" value="ring"> Ring Patch</div>
+<div class="symptom-item"><input type="checkbox" value="scaling"> Scaling</div>
 
-<div class="symptom-item">Dark Spots <input type="checkbox" value="dark"></div>
+<div class="symptom-item"><input type="checkbox" value="dark"> Dark Spots</div>
 
 </div>
 
-<!-- FIXED BUTTON -->
-<button onclick="analyze()">🔍 Analyze</button>
+<button onclick="analyze()">Analyze</button>
 <button id="dashboardBtn" class="hidden" onclick="loadPatients()">👨‍⚕️ Doctor Dashboard</button>
 
 </div>
 
-<!-- POPUP -->
+<!-- RESULT -->
 <div id="popup" class="modal">
-<div class="modal-content" id="result"></div>
+<div class="modal-content" id="report">
+<div id="result"></div>
+<button onclick="downloadPDF()">📄 Download PDF</button>
+<button onclick="closePopup()">Close</button>
 </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
 <script>
 
-/* LOGIN */
+// LOGIN
 function login(){
 let u=document.getElementById("username").value;
 let p=document.getElementById("password").value;
@@ -205,102 +241,118 @@ document.getElementById("loginPage").classList.add("hidden");
 document.getElementById("app").classList.remove("hidden");
 }
 
-/* ANALYZE FIXED */
+// GET SYMPTOMS
+function getSymptoms(){
+return Array.from(document.querySelectorAll("input[type=checkbox]:checked"))
+.map(cb=>cb.value);
+}
+
+// ANALYZE
 function analyze(){
 
 let name=document.getElementById("name").value;
-let age=document.getElementById("age").value;
-let location=document.getElementById("location").value;
 let severity=document.getElementById("severity").value;
 
-let symptoms = Array.from(document.querySelectorAll("input[type=checkbox]:checked")).map(cb=>cb.value);
+let symptoms=getSymptoms();
 
-if(!name || !age){
-alert("Enter name & age");
-return;
-}
+let scores={eczema:0,acne:0,fungal:0,bacterial:0,pigmentation:0};
 
-let disease="General Issue";
-let recovery="1-2 weeks";
-let advice="Maintain hygiene";
-let precautions="Avoid irritation";
-
-if(symptoms.includes("pimple")){
-disease="Acne";
-advice="Clean face regularly";
-precautions="Avoid oily food";
-}
-if(symptoms.includes("ring")){
-disease="Fungal Infection";
-recovery="2-3 weeks";
-advice="Keep area dry";
-}
-if(symptoms.includes("itch")){
-disease="Eczema";
-advice="Use moisturizer";
-}
-
-let doctorAdvice = severity==="Severe" ? "Visit doctor immediately" : "Consult if persists";
-
-/* SAVE */
-let history = JSON.parse(localStorage.getItem("patients") || "[]");
-history.push({name, age, disease, date:new Date().toLocaleString()});
-localStorage.setItem("patients", JSON.stringify(history));
-
-/* REPORT */
-document.getElementById("result").innerHTML=`
-
-<h2>🧾 Diagnosis Report</h2>
-
-<p>👤 <b>${name}</b></p>
-<p>🎂 Age: ${age}</p>
-
-<hr>
-
-<p>🦠 <b>${disease}</b></p>
-<p>⚠️ Severity: ${severity}</p>
-<p>📍 Body: ${location}</p>
-
-<hr>
-
-<p>⏳ Recovery: ${recovery}</p>
-<p>💊 Advice: ${advice}</p>
-<p>🛡 Precautions: ${precautions}</p>
-<p>👨‍⚕️ ${doctorAdvice}</p>
-
-<p style="color:red;">⚠ Not a medical diagnosis</p>
-
-<button onclick="closePopup()">Close</button>
-`;
-
-document.getElementById("popup").style.display="flex";
-}
-
-/* DASHBOARD */
-function loadPatients(){
-
-let history = JSON.parse(localStorage.getItem("patients") || "[]");
-
-let html="<h2>👨‍⚕️ Doctor Dashboard</h2>";
-
-history.forEach(p=>{
-html+=`
-<div class="patient-card">
-<p>👤 <b>${p.name}</b></p>
-<p>🦠 ${p.disease}</p>
-<p>📅 ${p.date}</p>
-</div>
-`;
+symptoms.forEach(s=>{
+if(["itch","dry","redness"].includes(s)) scores.eczema+=2;
+if(["pimple","blackhead"].includes(s)) scores.acne+=2;
+if(["ring","scaling"].includes(s)) scores.fungal+=3;
+if(["pus"].includes(s)) scores.bacterial+=3;
+if(["dark"].includes(s)) scores.pigmentation+=2;
 });
 
-html+=`<button onclick="closePopup()">Close</button>`;
+let total=Object.values(scores).reduce((a,b)=>a+b,0);
+let disease=Object.keys(scores).reduce((a,b)=>scores[a]>scores[b]?a:b);
 
-document.getElementById("result").innerHTML=html;
+let names={
+eczema:"Eczema",
+acne:"Acne",
+fungal:"Fungal Infection",
+bacterial:"Bacterial Infection",
+pigmentation:"Pigmentation"
+};
+
+// GRAPH
+let graph="";
+for(let key in scores){
+let percent=total?Math.round((scores[key]/total)*100):0;
+graph+=`<div>${names[key]} (${percent}%)<div class="bar" style="width:${percent}%"></div></div>`;
+}
+
+// NEW REPORT LOGIC
+let recovery="1-2 weeks";
+let advice="Maintain proper hygiene.";
+let precautions="Avoid touching affected area.";
+let doctorAdvice="Consult doctor if persists.";
+
+if(disease==="Acne"){
+advice="Wash face twice daily, avoid oily food.";
+precautions="Do not squeeze pimples.";
+}
+if(disease==="Fungal Infection"){
+recovery="2-3 weeks";
+advice="Keep area dry.";
+precautions="Avoid sweating.";
+}
+if(disease==="Eczema"){
+advice="Use moisturizer regularly.";
+precautions="Avoid scratching.";
+}
+
+if(severity==="high"){
+doctorAdvice="⚠ Immediate medical attention required.";
+}
+
+document.getElementById("result").innerHTML=`
+<div class="center"><h3>🧾 Diagnosis Report</h3></div>
+
+<p><b>👤 Name:</b> ${name}</p>
+<p><b>🦠 Condition:</b> ${names[disease]}</p>
+<p><b>⚠️ Severity:</b> ${severity}</p>
+
+<hr>
+
+${graph}
+
+<hr>
+
+<p><b>⏳ Recovery Time:</b> ${recovery}</p>
+<p><b>💊 Advice:</b> ${advice}</p>
+<p><b>🛡 Precautions:</b> ${precautions}</p>
+<p><b>👨‍⚕️ When to see doctor:</b> ${doctorAdvice}</p>
+
+<p style="color:red;">⚠ Not a medical diagnosis</p>
+`;
+
 document.getElementById("popup").style.display="flex";
 }
 
+// DASHBOARD
+function loadPatients(){
+
+let html = `
+<div class="center">
+<h2>👨‍⚕️ Doctor Dashboard</h2>
+<p style="color:gray;">Patient Records</p>
+</div>
+`;
+
+document.getElementById("result").innerHTML = html;
+document.getElementById("popup").style.display="flex";
+}
+
+// CLOSE
 function closePopup(){
 document.getElementById("popup").style.display="none";
+}
+
+// PDF
+function downloadPDF(){
+html2pdf().from(document.getElementById("report")).save();
 }
 
 </script>
