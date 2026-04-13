@@ -1,40 +1,51 @@
 <script>
 
-// GET ELEMENTS (IMPORTANT FIX)
+// ✅ WAIT FOR PAGE LOAD (CRITICAL FIX)
+document.addEventListener("DOMContentLoaded", function(){
+
+// GET ELEMENTS
 const home = document.getElementById("home");
 const patient = document.getElementById("patient");
 const loginBox = document.getElementById("login");
 const popup = document.getElementById("popup");
 const output = document.getElementById("output");
 
-/* NAV */
-function openPatient(){
+// NAV
+window.openPatient = function(){
   home.classList.add("hidden");
   patient.classList.remove("hidden");
 }
 
-function openDoctor(){
+window.openDoctor = function(){
   home.classList.add("hidden");
-  loginBox.classList.remove("hidden");   // ✅ FIXED
+  loginBox.classList.remove("hidden");
 }
 
-function goHome(){
+window.goHome = function(){
   location.reload();
 }
 
-/* ANALYZE */
-function analyze(){
+// ANALYZE
+window.analyze = function(){
 
-  let name=document.getElementById("name").value;
-  if(!name){alert("Enter name");return;}
+  let name=document.getElementById("name").value.trim();
+  if(!name){
+    alert("Enter name");
+    return;
+  }
 
   let body=document.getElementById("body").value;
   let severity=document.getElementById("severity").value;
   let duration=document.getElementById("duration").value;
 
-  // ✅ FIXED (only checkboxes)
+  // ✅ ONLY CHECKBOXES
   let symptoms=[...document.querySelectorAll('.grid input[type="checkbox"]:checked')]
                 .map(x=>x.value);
+
+  if(symptoms.length===0){
+    alert("Select at least one symptom");
+    return;
+  }
 
   let scores={eczema:0,acne:0,fungal:0};
 
@@ -44,7 +55,16 @@ function analyze(){
     if(["ring","scale"].includes(s)) scores.fungal+=3;
   });
 
-  let disease=Object.keys(scores).reduce((a,b)=>scores[a]>scores[b]?a:b);
+  // ✅ SAFE LOGIC
+  let disease = "eczema";
+  let max = -1;
+
+  for(let k in scores){
+    if(scores[k] > max){
+      max = scores[k];
+      disease = k;
+    }
+  }
 
   let names={
     eczema:"Eczema",
@@ -52,17 +72,23 @@ function analyze(){
     fungal:"Fungal Infection"
   };
 
-  /* GRAPH */
+  // GRAPH
   let total=Object.values(scores).reduce((a,b)=>a+b,0);
   let graph="";
+
   for(let k in scores){
     let p=total?Math.round(scores[k]/total*100):0;
-    graph+=`${names[k]} (${p}%)<div class="bar" style="width:${p}%"></div>`;
+    graph+=`
+    <div>
+      ${names[k]} (${p}%)
+      <div class="bar" style="width:${p}%"></div>
+    </div>`;
   }
 
-  /* REPORT */
+  // REPORT
   output.innerHTML=`
   <h2 style="text-align:center;">🧾 Report</h2>
+
   <p>👤 ${name}</p>
   <p>🦠 ${names[disease]}</p>
   <p>⚠️ ${severity}</p>
@@ -86,18 +112,21 @@ function analyze(){
 
   popup.style.display="flex";
 
-  /* SAVE */
+  // SAVE DATA
   let data=JSON.parse(localStorage.getItem("patients")||"[]");
+
   data.push({
     name,
     disease:names[disease],
     date:new Date().toLocaleString()
   });
+
   localStorage.setItem("patients",JSON.stringify(data));
 }
 
-/* LOGIN */
-function login(){
+// LOGIN
+window.login = function(){
+
   let u=document.getElementById("user").value;
   let p=document.getElementById("pass").value;
 
@@ -108,7 +137,7 @@ function login(){
   }
 }
 
-/* DASHBOARD */
+// DASHBOARD
 function loadDashboard(){
 
   let data=JSON.parse(localStorage.getItem("patients")||"[]");
@@ -135,15 +164,17 @@ function loadDashboard(){
   popup.style.display="flex";
 }
 
-/* PDF */
-function download(){
+// PDF
+window.download = function(){
   window.print();
 }
 
-/* CLOSE */
-function closePopup(){
+// CLOSE
+window.closePopup = function(){
   popup.style.display="none";
   goHome();
 }
+
+}); // END DOMContentLoaded
 
 </script>
