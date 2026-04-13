@@ -3,71 +3,101 @@
 <head>
 <title>Kalpana Skin Clinic</title>
 
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <style>
 
+/* BACKGROUND */
 body {
-  font-family: Arial;
-  background: linear-gradient(135deg,#1e3a8a,#0f172a);
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg,#0f172a,#1e3a8a);
   color:white;
+  margin:0;
   padding:20px;
 }
 
-/* container */
+/* CARD */
 .container {
   max-width:900px;
   margin:auto;
-  background:rgba(255,255,255,0.05);
+  background:rgba(255,255,255,0.08);
+  backdrop-filter: blur(10px);
   padding:20px;
   border-radius:15px;
+  box-shadow:0 8px 30px rgba(0,0,0,0.5);
+  animation: fadeIn 0.8s ease;
 }
 
-h2 { text-align:center; }
+/* TITLE */
+h2 {
+  text-align:center;
+  margin-bottom:20px;
+}
 
-input, select, button {
+/* INPUTS */
+input, select {
   width:100%;
-  padding:10px;
-  margin:8px 0;
-  border-radius:8px;
+  padding:12px;
+  margin:10px 0;
+  border-radius:10px;
   border:none;
+  outline:none;
+  font-size:14px;
 }
 
-/* ✅ PERFECT SYMPTOM GRID */
+/* BUTTON */
+button {
+  width:100%;
+  padding:12px;
+  margin-top:10px;
+  border-radius:10px;
+  border:none;
+  font-weight:bold;
+  cursor:pointer;
+  background:linear-gradient(90deg,#38bdf8,#06b6d4);
+  color:white;
+  transition:0.3s;
+}
+
+button:hover {
+  transform:scale(1.03);
+  box-shadow:0 0 15px #38bdf8;
+}
+
+/* SYMPTOMS GRID */
 .symptom-grid {
   display:grid;
-  grid-template-columns: 1fr 1fr; /* 2 clean columns */
+  grid-template-columns: repeat(2,1fr);
   gap:12px;
 }
 
-/* each row */
 .symptom-item {
   display:flex;
   align-items:center;
   gap:10px;
   padding:10px;
-  background:rgba(255,255,255,0.06);
-  border-radius:8px;
-  transition:0.2s;
+  background:rgba(255,255,255,0.08);
+  border-radius:10px;
+  transition:0.3s;
 }
 
 .symptom-item:hover {
-  background:rgba(255,255,255,0.12);
+  background:#38bdf8;
 }
 
-/* checkbox */
 .symptom-item input {
   width:18px;
   height:18px;
-  cursor:pointer;
 }
 
-/* button */
-button {
-  background:#38bdf8;
-  font-weight:bold;
-  cursor:pointer;
+/* MOBILE */
+@media(max-width:600px){
+  .symptom-grid{
+    grid-template-columns:1fr;
+  }
 }
 
-/* modal */
+/* MODAL */
 .modal {
   display:none;
   position:fixed;
@@ -82,34 +112,47 @@ button {
   background:white;
   color:black;
   padding:20px;
-  border-radius:10px;
+  border-radius:12px;
   width:90%;
-  max-width:600px;
+  max-width:500px;
+  animation: scaleUp 0.4s ease;
 }
 
 .center { text-align:center; }
 
-/* graph */
+/* GRAPH */
 .bar {
   height:10px;
   background:#38bdf8;
   margin:5px 0;
+  border-radius:5px;
 }
 
-/* login */
+/* LOGIN */
 .login {
   max-width:400px;
   margin:auto;
   margin-top:100px;
   background:rgba(255,255,255,0.1);
   padding:20px;
-  border-radius:10px;
+  border-radius:12px;
+  backdrop-filter: blur(10px);
+}
+
+/* ANIMATIONS */
+@keyframes fadeIn {
+  from{opacity:0; transform:translateY(20px);}
+  to{opacity:1;}
+}
+
+@keyframes scaleUp {
+  from{transform:scale(0.8);}
+  to{transform:scale(1);}
 }
 
 .hidden { display:none; }
 
 </style>
-
 </head>
 
 <body>
@@ -118,8 +161,8 @@ button {
 <div id="loginPage" class="login">
 <h2>👨‍⚕️ Doctor Login</h2>
 
-<input id="username" placeholder="Username">
-<input id="password" type="password" placeholder="Password">
+<input id="username" placeholder="👤 Username">
+<input id="password" type="password" placeholder="🔒 Password">
 
 <button onclick="login()">Login</button>
 <button onclick="showPatient()">Continue as Patient</button>
@@ -130,26 +173,24 @@ button {
 
 <h2>🧠 Kalpana Skin Clinic</h2>
 
-<input id="name" placeholder="Name">
-<input id="age" placeholder="Age">
+<input id="name" placeholder="👤 Name">
+<input id="age" placeholder="🎂 Age">
 
 <select id="location">
-<option value="">Body Location</option>
+<option value="">📍 Body Location</option>
 <option value="face">Face</option>
 <option value="feet">Feet</option>
 <option value="body">Full Body</option>
 </select>
 
 <select id="severity">
-<option value="">Severity</option>
+<option value="">⚠️ Severity</option>
 <option value="low">Mild</option>
 <option value="medium">Moderate</option>
 <option value="high">Severe</option>
 </select>
 
-<!-- ✅ FIXED SYMPTOMS -->
-<div class="section">
-<h3>Symptoms</h3>
+<h3>🩺 Symptoms</h3>
 
 <div class="symptom-grid">
 
@@ -168,10 +209,8 @@ button {
 <div class="symptom-item"><input type="checkbox" value="dark"> Dark Spots</div>
 
 </div>
-</div>
 
 <button onclick="analyze()">Analyze</button>
-<button id="dashboardBtn" class="hidden" onclick="loadPatients()">Doctor Dashboard</button>
 
 </div>
 
@@ -181,7 +220,7 @@ button {
 
 <div id="result"></div>
 
-<button onclick="downloadPDF()">Download PDF</button>
+<button onclick="downloadPDF()">📄 Download PDF</button>
 <button onclick="closePopup()">Close</button>
 
 </div>
@@ -191,7 +230,6 @@ button {
 
 <script>
 
-// LOGIN
 function login(){
 let u=document.getElementById("username").value;
 let p=document.getElementById("password").value;
@@ -199,7 +237,6 @@ let p=document.getElementById("password").value;
 if(u==="doctor" && p==="1234"){
 document.getElementById("loginPage").classList.add("hidden");
 document.getElementById("app").classList.remove("hidden");
-document.getElementById("dashboardBtn").classList.remove("hidden");
 }else{
 alert("Invalid Login ❌");
 }
@@ -210,17 +247,14 @@ document.getElementById("loginPage").classList.add("hidden");
 document.getElementById("app").classList.remove("hidden");
 }
 
-// GET SYMPTOMS
 function getSymptoms(){
 return Array.from(document.querySelectorAll("input[type=checkbox]:checked"))
 .map(cb=>cb.value);
 }
 
-// ANALYZE
 function analyze(){
 
 let name=document.getElementById("name").value;
-let age=document.getElementById("age").value;
 
 let symptoms=getSymptoms();
 let location=document.getElementById("location").value;
@@ -236,10 +270,6 @@ if(["pus"].includes(s)) scores.bacterial+=3;
 if(["dark"].includes(s)) scores.pigmentation+=2;
 });
 
-if(location==="face") scores.acne+=2;
-if(location==="feet") scores.fungal+=2;
-if(severity==="high") scores.bacterial+=2;
-
 let total=Object.values(scores).reduce((a,b)=>a+b,0);
 
 let disease=Object.keys(scores).reduce((a,b)=>scores[a]>scores[b]?a:b);
@@ -252,18 +282,15 @@ bacterial:"Bacterial Infection",
 pigmentation:"Pigmentation"
 };
 
-// GRAPH
 let graph="";
 for(let key in scores){
 let percent=total?Math.round((scores[key]/total)*100):0;
 graph+=`<div>${names[key]} (${percent}%)<div class="bar" style="width:${percent}%"></div></div>`;
 }
 
-// OUTPUT
 document.getElementById("result").innerHTML=`
-<div class="center"><h3>Diagnosis Report</h3></div>
+<div class="center"><h3>🧾 Diagnosis Report</h3></div>
 
-<p><b>Name:</b> ${name}</p>
 <p><b>Condition:</b> ${names[disease]}</p>
 
 ${graph}
@@ -274,12 +301,10 @@ ${graph}
 document.getElementById("popup").style.display="flex";
 }
 
-// CLOSE
 function closePopup(){
 document.getElementById("popup").style.display="none";
 }
 
-// PDF
 function downloadPDF(){
 html2pdf().from(document.getElementById("report")).save();
 }
