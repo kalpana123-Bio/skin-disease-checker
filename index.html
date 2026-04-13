@@ -7,7 +7,7 @@
 
 <style>
 body {
-  font-family: 'Segoe UI', sans-serif;
+  font-family: 'Segoe UI';
   background: linear-gradient(135deg,#1e3a8a,#0f172a);
   color:white;
   padding:20px;
@@ -19,11 +19,8 @@ body {
   background:rgba(255,255,255,0.05);
   padding:25px;
   border-radius:15px;
-  box-shadow:0 10px 30px rgba(0,0,0,0.4);
-  animation:fadeIn 0.6s ease;
+  animation:fadeIn 0.6s;
 }
-
-h2 { text-align:center; }
 
 input, select {
   width:100%;
@@ -39,40 +36,25 @@ button {
   margin-top:10px;
   border-radius:10px;
   border:none;
-  font-weight:bold;
-  cursor:pointer;
-  background:linear-gradient(90deg,#38bdf8,#06b6d4);
+  background:#38bdf8;
   color:white;
-  transition:0.3s;
+  cursor:pointer;
 }
 
-button:hover {
-  transform:translateY(-2px);
-  box-shadow:0 5px 15px rgba(0,0,0,0.3);
-}
-
-/* SAME GOOD GRID */
 .symptom-grid {
   display:grid;
   grid-template-columns:repeat(2,1fr);
-  gap:15px;
+  gap:12px;
 }
 
 .symptom-item {
   display:flex;
   justify-content:space-between;
-  align-items:center;
   padding:12px;
   background:#344a75;
   border-radius:10px;
 }
 
-.symptom-item input {
-  width:18px;
-  height:18px;
-}
-
-/* MODAL */
 .modal {
   display:none;
   position:fixed;
@@ -90,27 +72,27 @@ button:hover {
   border-radius:12px;
   width:90%;
   max-width:600px;
-  animation:scaleUp 0.4s ease;
+  animation:scaleUp 0.4s;
 }
 
 .patient-card {
   background:#f1f5f9;
-  padding:15px;
+  padding:12px;
   border-radius:10px;
   margin:10px 0;
 }
 
 @keyframes fadeIn {
-  from {opacity:0; transform:translateY(10px);}
-  to {opacity:1;}
+  from{opacity:0;}
+  to{opacity:1;}
 }
 
 @keyframes scaleUp {
-  from {transform:scale(0.8);}
-  to {transform:scale(1);}
+  from{transform:scale(0.8);}
+  to{transform:scale(1);}
 }
 
-.hidden { display:none; }
+.hidden {display:none;}
 </style>
 </head>
 
@@ -119,10 +101,8 @@ button:hover {
 <!-- LOGIN -->
 <div id="loginPage" class="container">
 <h2>👨‍⚕️ Doctor Login</h2>
-
 <input id="username" placeholder="Username">
 <input id="password" type="password" placeholder="Password">
-
 <button onclick="login()">Login</button>
 <button onclick="showPatient()">Continue as Patient</button>
 </div>
@@ -132,24 +112,22 @@ button:hover {
 
 <h2>🧠 Kalpana Skin Clinic</h2>
 
-<input id="name" placeholder="Name">
-<input id="age" placeholder="Age">
+<input id="name" placeholder="👤 Name">
+<input id="age" placeholder="🎂 Age">
 
-<!-- ✅ NEW INPUTS -->
 <select id="location">
 <option value="">📍 Body Location</option>
-<option value="Face">Face</option>
-<option value="Hands">Hands</option>
-<option value="Legs">Legs</option>
-<option value="Feet">Feet</option>
-<option value="Full Body">Full Body</option>
+<option>Face</option>
+<option>Hands</option>
+<option>Legs</option>
+<option>Feet</option>
 </select>
 
 <select id="severity">
 <option value="">⚠️ Severity</option>
-<option value="Mild">Mild</option>
-<option value="Moderate">Moderate</option>
-<option value="Severe">Severe</option>
+<option>Mild</option>
+<option>Moderate</option>
+<option>Severe</option>
 </select>
 
 <h3>🩺 Symptoms</h3>
@@ -166,8 +144,8 @@ button:hover {
 <div class="symptom-item">Dark Spots <input type="checkbox" value="dark"></div>
 </div>
 
-<button onclick="analyze()">Analyze</button>
-<button id="dashboardBtn" class="hidden" onclick="loadPatients()">Doctor Dashboard</button>
+<button onclick="analyze()">🔍 Analyze</button>
+<button id="dashboardBtn" class="hidden" onclick="loadPatients()">👨‍⚕️ Doctor Dashboard</button>
 
 </div>
 
@@ -180,21 +158,21 @@ button:hover {
 
 // LOGIN
 function login(){
-let u=document.getElementById("username").value;
-let p=document.getElementById("password").value;
+let u=username.value;
+let p=password.value;
 
 if(u==="doctor" && p==="1234"){
-document.getElementById("loginPage").classList.add("hidden");
-document.getElementById("app").classList.remove("hidden");
-document.getElementById("dashboardBtn").classList.remove("hidden");
+loginPage.classList.add("hidden");
+app.classList.remove("hidden");
+dashboardBtn.classList.remove("hidden");
 }else{
 alert("Invalid Login ❌");
 }
 }
 
 function showPatient(){
-document.getElementById("loginPage").classList.add("hidden");
-document.getElementById("app").classList.remove("hidden");
+loginPage.classList.add("hidden");
+app.classList.remove("hidden");
 }
 
 // ANALYZE
@@ -205,8 +183,12 @@ let age=document.getElementById("age").value;
 let location=document.getElementById("location").value;
 let severity=document.getElementById("severity").value;
 
-let symptoms = Array.from(document.querySelectorAll("input[type=checkbox]:checked"))
-.map(cb=>cb.value);
+let symptoms = Array.from(document.querySelectorAll("input[type=checkbox]:checked")).map(cb=>cb.value);
+
+if(!name || !age){
+alert("Enter name & age");
+return;
+}
 
 let disease="General Skin Issue";
 let recovery="1-2 weeks";
@@ -215,7 +197,6 @@ let precautions="Avoid irritation";
 
 if(symptoms.includes("pimple")){
 disease="Acne";
-recovery="1-2 weeks";
 advice="Clean face regularly";
 precautions="Avoid oily food";
 }
@@ -223,78 +204,75 @@ else if(symptoms.includes("ring")){
 disease="Fungal Infection";
 recovery="2-3 weeks";
 advice="Keep area dry";
-precautions="Avoid sweating";
+precautions="Avoid sweat";
 }
 else if(symptoms.includes("itch")){
 disease="Eczema";
-recovery="1-2 weeks";
 advice="Use moisturizer";
 precautions="Avoid scratching";
 }
 
-let doctorAdvice = severity==="Severe" 
-? "Visit doctor immediately"
-: "Consult if persists";
+let doctorAdvice = severity==="Severe" ? "Visit doctor immediately" : "Consult if persists";
 
-// SAVE
+// SAVE DATA
 let history = JSON.parse(localStorage.getItem("patients") || "[]");
 history.push({name, age, disease, date:new Date().toLocaleString()});
 localStorage.setItem("patients", JSON.stringify(history));
 
 // REPORT
-document.getElementById("result").innerHTML=`
-<h3 style="text-align:center;">🧾 Diagnosis Report</h3>
+result.innerHTML = `
+<h2 style="text-align:center;">🧾 Diagnosis Report</h2>
 
-<p><b>👤 Name:</b> ${name}</p>
-<p><b>🎂 Age:</b> ${age}</p>
-
-<hr>
-
-<p><b>🦠 Condition:</b> ${disease}</p>
-<p><b>⚠️ Severity:</b> ${severity}</p>
-<p><b>📍 Body Part:</b> ${location}</p>
+<p>👤 <b>${name}</b></p>
+<p>🎂 Age: ${age}</p>
 
 <hr>
 
-<p><b>⏳ Recovery Time:</b> ${recovery}</p>
+<p>🦠 Condition: <b>${disease}</b></p>
+<p>⚠️ Severity: ${severity}</p>
+<p>📍 Body Part: ${location}</p>
 
-<p><b>💊 Advice:</b> ${advice}</p>
-<p><b>🛡 Precautions:</b> ${precautions}</p>
+<hr>
 
-<p><b>👨‍⚕️ When to see doctor:</b> ${doctorAdvice}</p>
+<p>⏳ Recovery: ${recovery}</p>
+<p>💊 Advice: ${advice}</p>
+<p>🛡 Precautions: ${precautions}</p>
+<p>👨‍⚕️ Doctor: ${doctorAdvice}</p>
 
 <p style="color:red;">⚠ Not a medical diagnosis</p>
 
 <button onclick="closePopup()">Close</button>
 `;
 
-document.getElementById("popup").style.display="flex";
+popup.style.display="flex";
 }
 
 // DASHBOARD
 function loadPatients(){
+
 let history = JSON.parse(localStorage.getItem("patients") || "[]");
 
-let html="<h2 style='text-align:center;'>Doctor Dashboard</h2>";
+let html="<h2>👨‍⚕️ Doctor Dashboard</h2>";
 
 history.forEach(p=>{
 html+=`
 <div class="patient-card">
-<p><b>${p.name}</b></p>
-<p>${p.disease}</p>
-<p>${p.date}</p>
+<p>👤 <b>${p.name}</b></p>
+<p>🦠 ${p.disease}</p>
+<p>📅 ${p.date}</p>
 </div>
 `;
 });
 
 html+=`<button onclick="closePopup()">Close</button>`;
 
-document.getElementById("result").innerHTML=html;
-document.getElementById("popup").style.display="flex";
+result.innerHTML=html;
+popup.style.display="flex";
 }
 
+// CLOSE
 function closePopup(){
-document.getElementById("popup").style.display="none";
+popup.style.display="none";
 }
 
 </script>
