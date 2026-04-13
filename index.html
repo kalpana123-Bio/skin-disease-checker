@@ -7,6 +7,8 @@
 
 <style>
 
+*{box-sizing:border-box;}
+
 body{
   font-family:'Segoe UI';
   background:linear-gradient(135deg,#0f172a,#1e3a8a);
@@ -14,10 +16,28 @@ body{
   padding:20px;
 }
 
-/* CENTER */
-.center{text-align:center;}
+/* HOME */
+.home{
+  max-width:400px;
+  margin:auto;
+  margin-top:100px;
+  background:#2b3f73;
+  padding:25px;
+  border-radius:15px;
+  text-align:center;
+}
 
-/* CARD */
+/* LOGIN */
+.login{
+  max-width:400px;
+  margin:auto;
+  margin-top:100px;
+  background:#2b3f73;
+  padding:25px;
+  border-radius:15px;
+}
+
+/* MAIN */
 .container{
   max-width:850px;
   margin:auto;
@@ -25,6 +45,16 @@ body{
   padding:25px;
   border-radius:15px;
   animation:fadeIn 0.5s;
+}
+
+h2,h3{text-align:center;}
+
+input,select{
+  width:100%;
+  padding:12px;
+  margin:10px 0;
+  border-radius:10px;
+  border:none;
 }
 
 /* BUTTON */
@@ -38,18 +68,11 @@ button{
   color:white;
   cursor:pointer;
   font-weight:bold;
+  transition:0.3s;
 }
+button:hover{transform:scale(1.03);}
 
-/* INPUT FIX */
-input,select{
-  width:100%;
-  padding:12px;
-  margin:10px 0;
-  border-radius:10px;
-  border:none;
-}
-
-/* GRID */
+/* GRID FIX PERFECT */
 .symptom-grid{
   display:grid;
   grid-template-columns:repeat(2,1fr);
@@ -85,27 +108,36 @@ input,select{
   max-width:600px;
   max-height:80vh;
   overflow:auto;
+  animation:scaleUp 0.4s;
 }
 
-/* SCROLL DASHBOARD */
-.scroll{
-  max-height:300px;
-  overflow:auto;
+/* CARD */
+.patient-card{
+  background:#f1f5f9;
+  padding:12px;
+  border-radius:10px;
+  margin:10px 0;
+}
+
+/* GRAPH */
+.bar{
+  height:8px;
+  background:#38bdf8;
+  border-radius:5px;
+  margin:5px 0;
 }
 
 /* ANIMATION */
 @keyframes fadeIn{
-  from{opacity:0;}
-  to{opacity:1;}
+from{opacity:0;transform:translateY(10px);}
+to{opacity:1;}
+}
+@keyframes scaleUp{
+from{transform:scale(0.8);}
+to{transform:scale(1);}
 }
 
 .hidden{display:none;}
-
-.bar{
-  height:10px;
-  background:#38bdf8;
-  margin:5px 0;
-}
 
 </style>
 </head>
@@ -113,17 +145,25 @@ input,select{
 <body>
 
 <!-- HOME -->
-<div id="home" class="container center">
+<div id="home" class="home">
 <h2>🏥 Kalpana Skin Clinic</h2>
-
 <button onclick="showPatient()">👤 Patient</button>
-<button onclick="loadDashboard()">👨‍⚕️ Doctor</button>
+<button onclick="showLogin()">👨‍⚕️ Doctor</button>
 </div>
 
-<!-- PATIENT FORM -->
+<!-- LOGIN -->
+<div id="loginPage" class="login hidden">
+<h2>👨‍⚕️ Doctor Login</h2>
+<input id="username" placeholder="👤 Username">
+<input id="password" type="password" placeholder="🔒 Password">
+<button onclick="login()">Login</button>
+<button onclick="backHome()">⬅ Back</button>
+</div>
+
+<!-- PATIENT -->
 <div id="app" class="container hidden">
 
-<h2 class="center">🧠 Skin Analysis</h2>
+<h2>🧠 Kalpana Skin Clinic</h2>
 
 <input id="name" placeholder="👤 Name">
 <input id="age" placeholder="🎂 Age">
@@ -142,7 +182,7 @@ input,select{
 <option>Severe</option>
 </select>
 
-<h3 class="center">🩺 Symptoms</h3>
+<h3>🩺 Symptoms</h3>
 
 <div class="symptom-grid">
 
@@ -163,7 +203,7 @@ input,select{
 </div>
 
 <button onclick="analyze()">🔍 Analyze</button>
-<button onclick="goHome()">⬅ Back</button>
+<button onclick="backHome()">⬅ Back</button>
 
 </div>
 
@@ -179,110 +219,114 @@ function showPatient(){
 home.classList.add("hidden");
 app.classList.remove("hidden");
 }
-
-function goHome(){
-app.classList.add("hidden");
-home.classList.remove("hidden");
+function showLogin(){
+home.classList.add("hidden");
+loginPage.classList.remove("hidden");
+}
+function backHome(){
+location.reload();
 }
 
-/* ANALYZE */
+/* LOGIN */
+function login(){
+if(username.value==="doctor" && password.value==="1234"){
+loadDashboard();
+}else{
+alert("Invalid Login ❌");
+}
+}
+
+/* ANALYZE FIXED */
 function analyze(){
 
 let name=document.getElementById("name").value;
-let age=document.getElementById("age").value;
 let severity=document.getElementById("severity").value;
 
-let symptoms=Array.from(document.querySelectorAll("input[type=checkbox]:checked")).map(cb=>cb.value);
+if(!name){alert("Enter name"); return;}
 
-if(!name || !age){
-alert("Fill details");
-return;
-}
+let symptoms=Array.from(document.querySelectorAll("input:checked")).map(x=>x.value);
 
-let disease="General Issue";
-let advice="Maintain hygiene";
-let precautions="Avoid irritation";
-let recovery="1-2 weeks";
+let scores={eczema:0,acne:0,fungal:0};
 
-if(symptoms.includes("pimple")){
-disease="Acne";
-advice="Clean face";
-}
-if(symptoms.includes("ring")){
-disease="Fungal Infection";
-recovery="2-3 weeks";
-}
-if(symptoms.includes("itch")){
-disease="Eczema";
-}
+symptoms.forEach(s=>{
+if(["itch","dry"].includes(s)) scores.eczema+=2;
+if(["pimple","blackhead"].includes(s)) scores.acne+=2;
+if(["ring","scaling"].includes(s)) scores.fungal+=3;
+});
 
-let doctorAdvice=severity==="Severe"?"Visit doctor immediately":"Consult if persists";
+let disease=Object.keys(scores).reduce((a,b)=>scores[a]>scores[b]?a:b);
 
-/* SAVE */
-let data=JSON.parse(localStorage.getItem("patients")||"[]");
-data.push({name,age,disease,date:new Date().toLocaleString()});
-localStorage.setItem("patients",JSON.stringify(data));
+let names={
+eczema:"Eczema",
+acne:"Acne",
+fungal:"Fungal Infection"
+};
 
 /* GRAPH */
-let graph=`<div>Confidence<div class="bar" style="width:80%"></div></div>`;
+let graph="";
+let total=Object.values(scores).reduce((a,b)=>a+b,0);
+
+for(let k in scores){
+let p=total?Math.round(scores[k]/total*100):0;
+graph+=`${names[k]} (${p}%)<div class="bar" style="width:${p}%"></div>`;
+}
 
 /* REPORT */
 result.innerHTML=`
-<h2 class="center">🧾 Report</h2>
+<h2>🧾 Diagnosis Report</h2>
 
 <p>👤 ${name}</p>
-<p>🦠 ${disease}</p>
+<p>🦠 ${names[disease]}</p>
 <p>⚠️ ${severity}</p>
 
 <hr>
 
 ${graph}
 
-<p>⏳ ${recovery}</p>
-<p>💊 ${advice}</p>
-<p>🛡 ${precautions}</p>
-<p>👨‍⚕️ ${doctorAdvice}</p>
+<hr>
 
-<button onclick="downloadPDF()">📄 Download</button>
+<p>💊 Advice: Maintain hygiene</p>
+<p>🛡 Precautions: Avoid touching</p>
+<p>⏳ Recovery: 1-2 weeks</p>
+<p>👨‍⚕️ Visit doctor if severe</p>
+
 <button onclick="closePopup()">Close</button>
 `;
 
 popup.style.display="flex";
+
+/* SAVE */
+let data=JSON.parse(localStorage.getItem("patients")||"[]");
+data.push({name,disease,date:new Date().toLocaleString()});
+localStorage.setItem("patients",JSON.stringify(data));
 }
 
 /* DASHBOARD */
 function loadDashboard(){
 
-home.classList.add("hidden");
-
 let data=JSON.parse(localStorage.getItem("patients")||"[]");
 
-let html="<h2 class='center'>👨‍⚕️ Dashboard</h2><div class='scroll'>";
+let html="<h2>👨‍⚕️ Doctor Dashboard</h2>";
 
 data.forEach(p=>{
 html+=`
-<div style="background:#eee;padding:10px;margin:10px;border-radius:8px;">
-<p>👤 ${p.name}</p>
-<p>🎂 ${p.age}</p>
-<p>🦠 ${p.disease}</p>
-<p>📅 ${p.date}</p>
+<div class="patient-card">
+👤 ${p.name}<br>
+🦠 ${p.disease}<br>
+📅 ${p.date}
 </div>
 `;
 });
 
-html+="</div><button onclick='goHome()'>⬅ Back</button>";
+html+=`<button onclick="closePopup()">Close</button>`;
 
 result.innerHTML=html;
 popup.style.display="flex";
 }
 
+/* CLOSE */
 function closePopup(){
 popup.style.display="none";
-}
-
-/* PDF */
-function downloadPDF(){
-window.print();
 }
 
 </script>
