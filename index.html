@@ -1,9 +1,7 @@
 <script>
 
-// ✅ WAIT FOR PAGE LOAD (CRITICAL FIX)
-document.addEventListener("DOMContentLoaded", function(){
+// FIX: define globals directly (NO DOMContentLoaded)
 
-// GET ELEMENTS
 const home = document.getElementById("home");
 const patient = document.getElementById("patient");
 const loginBox = document.getElementById("login");
@@ -11,51 +9,58 @@ const popup = document.getElementById("popup");
 const output = document.getElementById("output");
 
 // NAV
-window.openPatient = function(){
-  home.classList.add("hidden");
-  patient.classList.remove("hidden");
+function openPatient(){
+  home.style.display="none";
+  patient.style.display="block";
 }
 
-window.openDoctor = function(){
-  home.classList.add("hidden");
-  loginBox.classList.remove("hidden");
+function openDoctor(){
+  home.style.display="none";
+  loginBox.style.display="block";
 }
 
-window.goHome = function(){
+function goHome(){
   location.reload();
 }
 
 // ANALYZE
-window.analyze = function(){
+function analyze(){
 
-  let name=document.getElementById("name").value.trim();
+  let name = document.getElementById("name").value;
+
   if(!name){
     alert("Enter name");
     return;
   }
 
-  let body=document.getElementById("body").value;
-  let severity=document.getElementById("severity").value;
-  let duration=document.getElementById("duration").value;
+  let body = document.getElementById("body").value;
+  let severity = document.getElementById("severity").value;
+  let duration = document.getElementById("duration").value;
 
-  // ✅ ONLY CHECKBOXES
-  let symptoms=[...document.querySelectorAll('.grid input[type="checkbox"]:checked')]
-                .map(x=>x.value);
+  // ONLY CHECKBOXES
+  let checkboxes = document.querySelectorAll(".grid input[type='checkbox']");
+  let symptoms = [];
+
+  checkboxes.forEach(cb=>{
+    if(cb.checked){
+      symptoms.push(cb.value);
+    }
+  });
 
   if(symptoms.length===0){
     alert("Select at least one symptom");
     return;
   }
 
-  let scores={eczema:0,acne:0,fungal:0};
+  let scores = {eczema:0, acne:0, fungal:0};
 
   symptoms.forEach(s=>{
-    if(["itch","dry"].includes(s)) scores.eczema+=2;
-    if(["pimple","black"].includes(s)) scores.acne+=2;
-    if(["ring","scale"].includes(s)) scores.fungal+=3;
+    if(s==="itch" || s==="dry") scores.eczema+=2;
+    if(s==="pimple" || s==="black") scores.acne+=2;
+    if(s==="ring" || s==="scale") scores.fungal+=3;
   });
 
-  // ✅ SAFE LOGIC
+  // SAFE FIND MAX
   let disease = "eczema";
   let max = -1;
 
@@ -66,27 +71,23 @@ window.analyze = function(){
     }
   }
 
-  let names={
+  let names = {
     eczema:"Eczema",
     acne:"Acne",
     fungal:"Fungal Infection"
   };
 
   // GRAPH
-  let total=Object.values(scores).reduce((a,b)=>a+b,0);
-  let graph="";
+  let total = scores.eczema + scores.acne + scores.fungal;
+  let graph = "";
 
   for(let k in scores){
-    let p=total?Math.round(scores[k]/total*100):0;
-    graph+=`
-    <div>
-      ${names[k]} (${p}%)
-      <div class="bar" style="width:${p}%"></div>
-    </div>`;
+    let p = total ? Math.round(scores[k]/total*100) : 0;
+    graph += names[k] + " ("+p+"%)<div class='bar' style='width:"+p+"%'></div>";
   }
 
   // REPORT
-  output.innerHTML=`
+  output.innerHTML = `
   <h2 style="text-align:center;">🧾 Report</h2>
 
   <p>👤 ${name}</p>
@@ -112,23 +113,23 @@ window.analyze = function(){
 
   popup.style.display="flex";
 
-  // SAVE DATA
-  let data=JSON.parse(localStorage.getItem("patients")||"[]");
+  // SAVE
+  let data = JSON.parse(localStorage.getItem("patients") || "[]");
 
   data.push({
-    name,
+    name:name,
     disease:names[disease],
     date:new Date().toLocaleString()
   });
 
-  localStorage.setItem("patients",JSON.stringify(data));
+  localStorage.setItem("patients", JSON.stringify(data));
 }
 
 // LOGIN
-window.login = function(){
+function login(){
 
-  let u=document.getElementById("user").value;
-  let p=document.getElementById("pass").value;
+  let u = document.getElementById("user").value;
+  let p = document.getElementById("pass").value;
 
   if(u==="doctor" && p==="1234"){
     loadDashboard();
@@ -140,16 +141,16 @@ window.login = function(){
 // DASHBOARD
 function loadDashboard(){
 
-  let data=JSON.parse(localStorage.getItem("patients")||"[]");
+  let data = JSON.parse(localStorage.getItem("patients") || "[]");
 
-  let html="<h2 style='text-align:center;'>👨‍⚕️ Dashboard</h2>";
+  let html = "<h2 style='text-align:center;'>👨‍⚕️ Dashboard</h2>";
 
   if(data.length===0){
-    html+="<p>No patient records yet</p>";
+    html += "<p>No patient records</p>";
   }
 
   data.forEach(p=>{
-    html+=`
+    html += `
     <div class="patient">
       👤 ${p.name}<br>
       🦠 ${p.disease}<br>
@@ -158,23 +159,21 @@ function loadDashboard(){
     `;
   });
 
-  html+=`<button onclick="closePopup()">❌ Close</button>`;
+  html += `<button onclick="closePopup()">❌ Close</button>`;
 
-  output.innerHTML=html;
+  output.innerHTML = html;
   popup.style.display="flex";
 }
 
 // PDF
-window.download = function(){
+function download(){
   window.print();
 }
 
 // CLOSE
-window.closePopup = function(){
+function closePopup(){
   popup.style.display="none";
   goHome();
 }
-
-}); // END DOMContentLoaded
 
 </script>
