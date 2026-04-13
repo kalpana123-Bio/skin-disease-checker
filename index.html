@@ -4,6 +4,7 @@
 <title>Kalpana Skin Clinic</title>
 
 <style>
+
 body {
   font-family: Arial;
   background: linear-gradient(135deg,#1e3a8a,#0f172a);
@@ -11,6 +12,7 @@ body {
   padding:20px;
 }
 
+/* container */
 .container {
   max-width:900px;
   margin:auto;
@@ -29,27 +31,43 @@ input, select, button {
   border:none;
 }
 
-.grid {
+/* ✅ PERFECT SYMPTOM GRID */
+.symptom-grid {
   display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:10px;
+  grid-template-columns: 1fr 1fr; /* 2 clean columns */
+  gap:12px;
 }
 
-label {
+/* each row */
+.symptom-item {
   display:flex;
   align-items:center;
-  gap:8px;
-  padding:8px;
-  background:rgba(255,255,255,0.05);
+  gap:10px;
+  padding:10px;
+  background:rgba(255,255,255,0.06);
   border-radius:8px;
+  transition:0.2s;
 }
 
+.symptom-item:hover {
+  background:rgba(255,255,255,0.12);
+}
+
+/* checkbox */
+.symptom-item input {
+  width:18px;
+  height:18px;
+  cursor:pointer;
+}
+
+/* button */
 button {
   background:#38bdf8;
   font-weight:bold;
   cursor:pointer;
 }
 
+/* modal */
 .modal {
   display:none;
   position:fixed;
@@ -71,13 +89,14 @@ button {
 
 .center { text-align:center; }
 
+/* graph */
 .bar {
   height:10px;
   background:#38bdf8;
   margin:5px 0;
 }
 
-/* login page */
+/* login */
 .login {
   max-width:400px;
   margin:auto;
@@ -90,20 +109,23 @@ button {
 .hidden { display:none; }
 
 </style>
+
 </head>
 
 <body>
 
-<!-- LOGIN PAGE -->
+<!-- LOGIN -->
 <div id="loginPage" class="login">
 <h2>👨‍⚕️ Doctor Login</h2>
+
 <input id="username" placeholder="Username">
 <input id="password" type="password" placeholder="Password">
+
 <button onclick="login()">Login</button>
 <button onclick="showPatient()">Continue as Patient</button>
 </div>
 
-<!-- MAIN APP -->
+<!-- APP -->
 <div id="app" class="container hidden">
 
 <h2>🧠 Kalpana Skin Clinic</h2>
@@ -125,107 +147,104 @@ button {
 <option value="high">Severe</option>
 </select>
 
-<div class="grid">
-<label><input type="checkbox" value="itch"> Itching</label>
-<label><input type="checkbox" value="dry"> Dry skin</label>
-<label><input type="checkbox" value="redness"> Redness</label>
+<!-- ✅ FIXED SYMPTOMS -->
+<div class="section">
+<h3>Symptoms</h3>
 
-<label><input type="checkbox" value="pimple"> Pimples</label>
-<label><input type="checkbox" value="blackhead"> Blackheads</label>
-<label><input type="checkbox" value="pus"> Pus</label>
+<div class="symptom-grid">
 
-<label><input type="checkbox" value="ring"> Ring patch</label>
-<label><input type="checkbox" value="scaling"> Scaling</label>
-<label><input type="checkbox" value="dark"> Dark spots</label>
+<div class="symptom-item"><input type="checkbox" value="itch"> Itching</div>
+<div class="symptom-item"><input type="checkbox" value="dry"> Dry Skin</div>
+
+<div class="symptom-item"><input type="checkbox" value="redness"> Redness</div>
+<div class="symptom-item"><input type="checkbox" value="pimple"> Pimples</div>
+
+<div class="symptom-item"><input type="checkbox" value="blackhead"> Blackheads</div>
+<div class="symptom-item"><input type="checkbox" value="pus"> Pus</div>
+
+<div class="symptom-item"><input type="checkbox" value="ring"> Ring Patch</div>
+<div class="symptom-item"><input type="checkbox" value="scaling"> Scaling</div>
+
+<div class="symptom-item"><input type="checkbox" value="dark"> Dark Spots</div>
+
+</div>
 </div>
 
 <button onclick="analyze()">Analyze</button>
-
-<!-- doctor only -->
-<button id="dashboardBtn" class="hidden" onclick="loadPatients()">View Patients</button>
+<button id="dashboardBtn" class="hidden" onclick="loadPatients()">Doctor Dashboard</button>
 
 </div>
 
 <!-- RESULT -->
 <div id="popup" class="modal">
 <div class="modal-content" id="report">
+
 <div id="result"></div>
+
 <button onclick="downloadPDF()">Download PDF</button>
 <button onclick="closePopup()">Close</button>
+
 </div>
 </div>
 
-<!-- FIREBASE -->
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
 <script>
 
-// 🔥 PASTE YOUR FIREBASE CONFIG HERE
-const firebaseConfig = {
-  apiKey: "YOUR_KEY",
-  authDomain: "YOUR_PROJECT.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-};
-
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
-
 // LOGIN
 function login(){
-let u = document.getElementById("username").value;
-let p = document.getElementById("password").value;
+let u=document.getElementById("username").value;
+let p=document.getElementById("password").value;
 
 if(u==="doctor" && p==="1234"){
-  document.getElementById("loginPage").classList.add("hidden");
-  document.getElementById("app").classList.remove("hidden");
-  document.getElementById("dashboardBtn").classList.remove("hidden");
+document.getElementById("loginPage").classList.add("hidden");
+document.getElementById("app").classList.remove("hidden");
+document.getElementById("dashboardBtn").classList.remove("hidden");
 }else{
-  alert("Invalid Login ❌");
+alert("Invalid Login ❌");
 }
 }
 
-// patient mode
 function showPatient(){
-  document.getElementById("loginPage").classList.add("hidden");
-  document.getElementById("app").classList.remove("hidden");
+document.getElementById("loginPage").classList.add("hidden");
+document.getElementById("app").classList.remove("hidden");
 }
 
-// get symptoms
+// GET SYMPTOMS
 function getSymptoms(){
- return Array.from(document.querySelectorAll("input[type=checkbox]:checked"))
- .map(cb=>cb.value);
+return Array.from(document.querySelectorAll("input[type=checkbox]:checked"))
+.map(cb=>cb.value);
 }
 
 // ANALYZE
 function analyze(){
 
-let name = document.getElementById("name").value;
-let age = document.getElementById("age").value;
+let name=document.getElementById("name").value;
+let age=document.getElementById("age").value;
 
-let symptoms = getSymptoms();
-let location = document.getElementById("location").value;
-let severity = document.getElementById("severity").value;
+let symptoms=getSymptoms();
+let location=document.getElementById("location").value;
+let severity=document.getElementById("severity").value;
 
-let scores = {eczema:0, acne:0, fungal:0, bacterial:0, pigmentation:0};
+let scores={eczema:0,acne:0,fungal:0,bacterial:0,pigmentation:0};
 
 symptoms.forEach(s=>{
- if(["itch","dry","redness"].includes(s)) scores.eczema+=2;
- if(["pimple","blackhead"].includes(s)) scores.acne+=2;
- if(["ring","scaling"].includes(s)) scores.fungal+=3;
- if(["pus"].includes(s)) scores.bacterial+=3;
- if(["dark"].includes(s)) scores.pigmentation+=2;
+if(["itch","dry","redness"].includes(s)) scores.eczema+=2;
+if(["pimple","blackhead"].includes(s)) scores.acne+=2;
+if(["ring","scaling"].includes(s)) scores.fungal+=3;
+if(["pus"].includes(s)) scores.bacterial+=3;
+if(["dark"].includes(s)) scores.pigmentation+=2;
 });
 
 if(location==="face") scores.acne+=2;
 if(location==="feet") scores.fungal+=2;
 if(severity==="high") scores.bacterial+=2;
 
-let total = Object.values(scores).reduce((a,b)=>a+b,0);
+let total=Object.values(scores).reduce((a,b)=>a+b,0);
 
-let disease = Object.keys(scores).reduce((a,b)=>scores[a]>scores[b]?a:b);
+let disease=Object.keys(scores).reduce((a,b)=>scores[a]>scores[b]?a:b);
 
-let names = {
+let names={
 eczema:"Eczema",
 acne:"Acne",
 fungal:"Fungal Infection",
@@ -233,62 +252,39 @@ bacterial:"Bacterial Infection",
 pigmentation:"Pigmentation"
 };
 
-// SAVE TO FIREBASE
-db.collection("patients").add({
- name, age,
- disease:names[disease],
- date:new Date().toLocaleString()
-});
-
 // GRAPH
 let graph="";
 for(let key in scores){
- let percent = total?Math.round((scores[key]/total)*100):0;
- graph+=`<div>${names[key]} (${percent}%)<div class="bar" style="width:${percent}%"></div></div>`;
+let percent=total?Math.round((scores[key]/total)*100):0;
+graph+=`<div>${names[key]} (${percent}%)<div class="bar" style="width:${percent}%"></div></div>`;
 }
 
-document.getElementById("result").innerHTML = `
-<h3 class="center">Diagnosis Report</h3>
+// OUTPUT
+document.getElementById("result").innerHTML=`
+<div class="center"><h3>Diagnosis Report</h3></div>
+
 <p><b>Name:</b> ${name}</p>
 <p><b>Condition:</b> ${names[disease]}</p>
+
 ${graph}
+
 <p style="color:red;">⚠ Not a medical diagnosis</p>
 `;
 
 document.getElementById("popup").style.display="flex";
 }
 
-// LOAD PATIENTS
-function loadPatients(){
-
-let html="<h3>Patient Records</h3>";
-
-db.collection("patients").get().then(snapshot=>{
-snapshot.forEach(doc=>{
- let p=doc.data();
- html+=`<p>${p.name} | ${p.age} | ${p.disease} | ${p.date}</p><hr>`;
-});
-
-document.getElementById("result").innerHTML=html;
-document.getElementById("popup").style.display="flex";
-
-});
-
+// CLOSE
+function closePopup(){
+document.getElementById("popup").style.display="none";
 }
 
 // PDF
 function downloadPDF(){
- html2pdf().from(document.getElementById("report")).save();
-}
-
-// CLOSE
-function closePopup(){
- document.getElementById("popup").style.display="none";
+html2pdf().from(document.getElementById("report")).save();
 }
 
 </script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
 </body>
 </html>
