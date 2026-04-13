@@ -7,74 +7,89 @@
 
 <style>
 
-body {
-  font-family: 'Segoe UI';
-  background: linear-gradient(135deg,#0f172a,#1e3a8a);
+body{
+  font-family:'Segoe UI';
+  background:linear-gradient(135deg,#0f172a,#1e3a8a);
   color:white;
   padding:20px;
 }
 
-/* LOGIN FIX */
-.login {
-  max-width:400px;
+/* LOGIN */
+.login{
+  max-width:420px;
   margin:auto;
   margin-top:100px;
-  background:rgba(255,255,255,0.1);
+  background:#2b3f73;
   padding:25px;
-  border-radius:12px;
+  border-radius:15px;
+  animation:fadeIn 0.5s ease;
 }
 
-/* INPUT FIX (same width) */
-.login input, .login button {
+.login input, .login button{
   width:100%;
 }
 
 /* MAIN */
-.container {
+.container{
   max-width:900px;
   margin:auto;
-  background:rgba(255,255,255,0.08);
-  padding:20px;
+  background:#2b3f73;
+  padding:25px;
   border-radius:15px;
+  animation:fadeIn 0.5s ease;
 }
 
-h2 { text-align:center; }
+h2,h3{
+  text-align:center;
+}
 
-input, select {
+/* INPUTS PERFECT */
+input,select{
   width:100%;
   padding:12px;
   margin:10px 0;
   border-radius:10px;
   border:none;
+  outline:none;
 }
 
-button {
+/* BUTTON */
+button{
   width:100%;
   padding:12px;
   margin-top:10px;
   border-radius:10px;
   border:none;
-  background:#38bdf8;
+  background:linear-gradient(90deg,#38bdf8,#06b6d4);
   color:white;
   cursor:pointer;
+  font-weight:bold;
+  transition:0.3s;
 }
 
-.symptom-grid {
+button:hover{
+  transform:scale(1.03);
+}
+
+/* GRID FIX */
+.symptom-grid{
   display:grid;
   grid-template-columns:repeat(2,1fr);
   gap:12px;
 }
 
-.symptom-item {
+/* ALIGNMENT FIX */
+.symptom-item{
   display:flex;
   justify-content:space-between;
-  padding:10px;
-  background:#344a75;
+  align-items:center;
+  padding:12px;
+  background:#3d568a;
   border-radius:10px;
 }
 
 /* MODAL */
-.modal {
+.modal{
   display:none;
   position:fixed;
   width:100%;
@@ -84,24 +99,36 @@ button {
   align-items:center;
 }
 
-.modal-content {
+.modal-content{
   background:white;
   color:black;
   padding:20px;
   border-radius:12px;
   width:90%;
   max-width:600px;
+  animation:scaleUp 0.4s ease;
 }
 
 /* CARD */
-.patient-card {
+.patient-card{
   background:#f1f5f9;
   padding:12px;
   border-radius:10px;
   margin:10px 0;
 }
 
-.hidden {display:none;}
+/* ANIMATIONS */
+@keyframes fadeIn{
+  from{opacity:0; transform:translateY(10px);}
+  to{opacity:1;}
+}
+
+@keyframes scaleUp{
+  from{transform:scale(0.8);}
+  to{transform:scale(1);}
+}
+
+.hidden{display:none;}
 
 </style>
 </head>
@@ -112,144 +139,156 @@ button {
 <div id="loginPage" class="login">
 <h2>👨‍⚕️ Doctor Login</h2>
 
-<input id="username" placeholder="Username">
-<input id="password" type="password" placeholder="Password">
+<input id="username" placeholder="👤 Username">
+<input id="password" type="password" placeholder="🔒 Password">
 
-<button onclick="login()">Login</button>
-<button onclick="showPatient()">Continue as Patient</button>
+<button onclick="login()">🔐 Login</button>
+<button onclick="showPatient()">👤 Continue as Patient</button>
 </div>
 
-<!-- PATIENT APP -->
+<!-- PATIENT -->
 <div id="app" class="container hidden">
 
 <h2>🧠 Kalpana Skin Clinic</h2>
 
-<input id="name" placeholder="Name">
-<input id="age" placeholder="Age">
+<input id="name" placeholder="👤 Name">
+<input id="age" placeholder="🎂 Age">
 
 <select id="location">
-<option value="">Body Location</option>
+<option value="">📍 Body Location</option>
 <option>Face</option>
 <option>Hands</option>
 <option>Legs</option>
 </select>
 
 <select id="severity">
-<option value="">Severity</option>
+<option value="">⚠️ Severity</option>
 <option>Mild</option>
 <option>Moderate</option>
 <option>Severe</option>
 </select>
 
-<h3>Symptoms</h3>
+<h3>🩺 Symptoms</h3>
 
 <div class="symptom-grid">
+
 <div class="symptom-item">Itching <input type="checkbox" value="itch"></div>
 <div class="symptom-item">Dry Skin <input type="checkbox" value="dry"></div>
+
 <div class="symptom-item">Redness <input type="checkbox" value="redness"></div>
 <div class="symptom-item">Pimples <input type="checkbox" value="pimple"></div>
+
 <div class="symptom-item">Blackheads <input type="checkbox" value="blackhead"></div>
 <div class="symptom-item">Pus <input type="checkbox" value="pus"></div>
+
 <div class="symptom-item">Ring Patch <input type="checkbox" value="ring"></div>
 <div class="symptom-item">Scaling <input type="checkbox" value="scaling"></div>
+
 <div class="symptom-item">Dark Spots <input type="checkbox" value="dark"></div>
-</div>
-
-<button onclick="analyze()">Analyze</button>
 
 </div>
 
-<!-- POPUP -->
+<button onclick="analyze()">🔍 Analyze</button>
+
+</div>
+
+<!-- RESULT -->
 <div id="popup" class="modal">
 <div class="modal-content" id="result"></div>
 </div>
 
 <script>
 
-// LOGIN FIX
+/* LOGIN */
 function login(){
 let u=document.getElementById("username").value;
 let p=document.getElementById("password").value;
 
 if(u==="doctor" && p==="1234"){
-loadDashboard();   // 👉 directly open dashboard
+loadDashboard();
 }else{
-alert("Invalid Login");
+alert("Invalid Login ❌");
 }
 }
 
-// PATIENT MODE
 function showPatient(){
 document.getElementById("loginPage").classList.add("hidden");
 document.getElementById("app").classList.remove("hidden");
 }
 
-// ANALYZE (SAVE DATA)
+/* ANALYZE FIXED */
 function analyze(){
 
 let name=document.getElementById("name").value;
 let age=document.getElementById("age").value;
+let location=document.getElementById("location").value;
+let severity=document.getElementById("severity").value;
+
+let symptoms=Array.from(document.querySelectorAll("input[type=checkbox]:checked")).map(cb=>cb.value);
+
+if(!name || !age){
+alert("Enter details");
+return;
+}
 
 let disease="Skin Issue";
 
-let history = JSON.parse(localStorage.getItem("patients") || "[]");
+let history=JSON.parse(localStorage.getItem("patients")||"[]");
 
-history.push({
-name:name,
-age:age,
-disease:disease,
-date:new Date().toLocaleString()
-});
+history.push({name,age,disease,date:new Date().toLocaleString()});
 
-localStorage.setItem("patients", JSON.stringify(history));
+localStorage.setItem("patients",JSON.stringify(history));
 
 document.getElementById("result").innerHTML=`
-<h2>Report Generated ✅</h2>
+<h2 style="text-align:center;">🧾 Diagnosis Report</h2>
+
+<p>👤 <b>${name}</b></p>
+<p>🎂 ${age}</p>
+
+<hr>
+
+<p>🦠 ${disease}</p>
+<p>📍 ${location}</p>
+<p>⚠️ ${severity}</p>
+
+<hr>
+
+<p>💊 Advice: Maintain hygiene</p>
+<p>🛡 Precautions: Avoid touching area</p>
+<p>👨‍⚕️ Visit doctor if severe</p>
+
 <button onclick="closePopup()">Close</button>
 `;
 
 document.getElementById("popup").style.display="flex";
 }
 
-// DASHBOARD FIX
+/* DASHBOARD */
 function loadDashboard(){
 
-let history = JSON.parse(localStorage.getItem("patients") || "[]");
+let history=JSON.parse(localStorage.getItem("patients")||"[]");
 
 let html="<h2 style='text-align:center;'>👨‍⚕️ Doctor Dashboard</h2>";
-
-if(history.length===0){
-html+="<p>No patient records found</p>";
-}
 
 history.forEach(p=>{
 html+=`
 <div class="patient-card">
-<p><b>👤 ${p.name}</b></p>
-<p>🎂 Age: ${p.age}</p>
+<p>👤 <b>${p.name}</b></p>
+<p>🎂 ${p.age}</p>
 <p>🦠 ${p.disease}</p>
 <p>📅 ${p.date}</p>
 </div>
 `;
 });
 
-html+=`
-<button onclick="downloadPDF()">Download PDF</button>
-<button onclick="closePopup()">Close</button>
-`;
+html+=`<button onclick="closePopup()">Close</button>`;
 
 document.getElementById("result").innerHTML=html;
 document.getElementById("popup").style.display="flex";
 }
 
-// CLOSE
 function closePopup(){
 document.getElementById("popup").style.display="none";
-}
-
-// PDF FIX
-function downloadPDF(){
-window.print();  // simple working fix
 }
 
 </script>
