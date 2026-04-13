@@ -1,6 +1,6 @@
 <script>
 
-// FIX: define globals directly (NO DOMContentLoaded)
+window.onload = function(){
 
 const home = document.getElementById("home");
 const patient = document.getElementById("patient");
@@ -9,46 +9,37 @@ const popup = document.getElementById("popup");
 const output = document.getElementById("output");
 
 // NAV
-function openPatient(){
+window.openPatient = function(){
   home.style.display="none";
   patient.style.display="block";
 }
 
-function openDoctor(){
+window.openDoctor = function(){
   home.style.display="none";
   loginBox.style.display="block";
 }
 
-function goHome(){
+window.goHome = function(){
   location.reload();
 }
 
 // ANALYZE
-function analyze(){
+window.analyze = function(){
 
   let name = document.getElementById("name").value;
-
-  if(!name){
-    alert("Enter name");
-    return;
-  }
+  if(!name){ alert("Enter name"); return; }
 
   let body = document.getElementById("body").value;
   let severity = document.getElementById("severity").value;
   let duration = document.getElementById("duration").value;
 
-  // ONLY CHECKBOXES
-  let checkboxes = document.querySelectorAll(".grid input[type='checkbox']");
   let symptoms = [];
-
-  checkboxes.forEach(cb=>{
-    if(cb.checked){
-      symptoms.push(cb.value);
-    }
+  document.querySelectorAll(".grid input[type='checkbox']").forEach(cb=>{
+    if(cb.checked) symptoms.push(cb.value);
   });
 
   if(symptoms.length===0){
-    alert("Select at least one symptom");
+    alert("Select symptoms");
     return;
   }
 
@@ -60,74 +51,55 @@ function analyze(){
     if(s==="ring" || s==="scale") scores.fungal+=3;
   });
 
-  // SAFE FIND MAX
-  let disease = "eczema";
-  let max = -1;
-
+  let disease="eczema", max=-1;
   for(let k in scores){
-    if(scores[k] > max){
-      max = scores[k];
-      disease = k;
+    if(scores[k]>max){
+      max=scores[k];
+      disease=k;
     }
   }
 
-  let names = {
+  let names={
     eczema:"Eczema",
     acne:"Acne",
     fungal:"Fungal Infection"
   };
 
-  // GRAPH
   let total = scores.eczema + scores.acne + scores.fungal;
-  let graph = "";
+  let graph="";
 
   for(let k in scores){
-    let p = total ? Math.round(scores[k]/total*100) : 0;
-    graph += names[k] + " ("+p+"%)<div class='bar' style='width:"+p+"%'></div>";
+    let p = total?Math.round(scores[k]/total*100):0;
+    graph += names[k]+" ("+p+"%)<div class='bar' style='width:"+p+"%'></div>";
   }
 
-  // REPORT
   output.innerHTML = `
   <h2 style="text-align:center;">🧾 Report</h2>
-
   <p>👤 ${name}</p>
   <p>🦠 ${names[disease]}</p>
   <p>⚠️ ${severity}</p>
   <p>📍 ${body}</p>
   <p>⏳ ${duration}</p>
-
   <hr>
-
   ${graph}
-
   <hr>
-
   <p>💊 Advice: Keep skin clean</p>
   <p>🛡 Precautions: Avoid touching infected area</p>
   <p>⏳ Recovery: 1-2 weeks</p>
   <p>👨‍⚕️ Consult doctor if severe</p>
-
   <button onclick="download()">📄 Download PDF</button>
   <button onclick="closePopup()">Close</button>
   `;
 
   popup.style.display="flex";
 
-  // SAVE
-  let data = JSON.parse(localStorage.getItem("patients") || "[]");
-
-  data.push({
-    name:name,
-    disease:names[disease],
-    date:new Date().toLocaleString()
-  });
-
-  localStorage.setItem("patients", JSON.stringify(data));
+  let data = JSON.parse(localStorage.getItem("patients")||"[]");
+  data.push({name,disease:names[disease],date:new Date().toLocaleString()});
+  localStorage.setItem("patients",JSON.stringify(data));
 }
 
 // LOGIN
-function login(){
-
+window.login = function(){
   let u = document.getElementById("user").value;
   let p = document.getElementById("pass").value;
 
@@ -141,13 +113,9 @@ function login(){
 // DASHBOARD
 function loadDashboard(){
 
-  let data = JSON.parse(localStorage.getItem("patients") || "[]");
+  let data = JSON.parse(localStorage.getItem("patients")||"[]");
 
   let html = "<h2 style='text-align:center;'>👨‍⚕️ Dashboard</h2>";
-
-  if(data.length===0){
-    html += "<p>No patient records</p>";
-  }
 
   data.forEach(p=>{
     html += `
@@ -166,14 +134,16 @@ function loadDashboard(){
 }
 
 // PDF
-function download(){
+window.download = function(){
   window.print();
 }
 
 // CLOSE
-function closePopup(){
+window.closePopup = function(){
   popup.style.display="none";
-  goHome();
+  location.reload();
+}
+
 }
 
 </script>
