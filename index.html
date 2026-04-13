@@ -7,6 +7,9 @@
 
 <style>
 
+/* FIX INPUT WIDTH ISSUE */
+*{box-sizing:border-box;}
+
 body{
   font-family:'Segoe UI';
   background:linear-gradient(135deg,#0f172a,#1e3a8a);
@@ -16,7 +19,7 @@ body{
 
 /* LOGIN */
 .login{
-  max-width:420px;
+  max-width:400px;
   margin:auto;
   margin-top:100px;
   background:#2b3f73;
@@ -25,13 +28,9 @@ body{
   animation:fadeIn 0.5s ease;
 }
 
-.login input, .login button{
-  width:100%;
-}
-
 /* MAIN */
 .container{
-  max-width:900px;
+  max-width:850px;
   margin:auto;
   background:#2b3f73;
   padding:25px;
@@ -39,18 +38,15 @@ body{
   animation:fadeIn 0.5s ease;
 }
 
-h2,h3{
-  text-align:center;
-}
+h2,h3{text-align:center}
 
-/* INPUTS PERFECT */
+/* PERFECT INPUT */
 input,select{
   width:100%;
   padding:12px;
   margin:10px 0;
   border-radius:10px;
   border:none;
-  outline:none;
 }
 
 /* BUTTON */
@@ -63,22 +59,18 @@ button{
   background:linear-gradient(90deg,#38bdf8,#06b6d4);
   color:white;
   cursor:pointer;
-  font-weight:bold;
   transition:0.3s;
 }
 
-button:hover{
-  transform:scale(1.03);
-}
+button:hover{transform:scale(1.03)}
 
-/* GRID FIX */
+/* CHECKBOX ALIGN FIX */
 .symptom-grid{
   display:grid;
   grid-template-columns:repeat(2,1fr);
   gap:12px;
 }
 
-/* ALIGNMENT FIX */
 .symptom-item{
   display:flex;
   justify-content:space-between;
@@ -88,7 +80,7 @@ button:hover{
   border-radius:10px;
 }
 
-/* MODAL */
+/* MODAL SCROLL FIX */
 .modal{
   display:none;
   position:fixed;
@@ -106,7 +98,17 @@ button:hover{
   border-radius:12px;
   width:90%;
   max-width:600px;
+  max-height:80vh;
+  overflow-y:auto; /* ✅ SCROLL FIX */
   animation:scaleUp 0.4s ease;
+}
+
+/* GRAPH */
+.bar{
+  height:10px;
+  background:#38bdf8;
+  margin:5px 0;
+  border-radius:5px;
 }
 
 /* CARD */
@@ -117,7 +119,7 @@ button:hover{
   margin:10px 0;
 }
 
-/* ANIMATIONS */
+/* ANIMATION */
 @keyframes fadeIn{
   from{opacity:0; transform:translateY(10px);}
   to{opacity:1;}
@@ -146,7 +148,7 @@ button:hover{
 <button onclick="showPatient()">👤 Continue as Patient</button>
 </div>
 
-<!-- PATIENT -->
+<!-- APP -->
 <div id="app" class="container hidden">
 
 <h2>🧠 Kalpana Skin Clinic</h2>
@@ -163,9 +165,9 @@ button:hover{
 
 <select id="severity">
 <option value="">⚠️ Severity</option>
-<option>Mild</option>
-<option>Moderate</option>
-<option>Severe</option>
+<option>Low</option>
+<option>Medium</option>
+<option>High</option>
 </select>
 
 <h3>🩺 Symptoms</h3>
@@ -207,60 +209,59 @@ let p=document.getElementById("password").value;
 if(u==="doctor" && p==="1234"){
 loadDashboard();
 }else{
-alert("Invalid Login ❌");
+alert("Invalid Login");
 }
 }
 
 function showPatient(){
-document.getElementById("loginPage").classList.add("hidden");
-document.getElementById("app").classList.remove("hidden");
+loginPage.classList.add("hidden");
+app.classList.remove("hidden");
 }
 
 /* ANALYZE FIXED */
 function analyze(){
 
 let name=document.getElementById("name").value;
-let age=document.getElementById("age").value;
-let location=document.getElementById("location").value;
 let severity=document.getElementById("severity").value;
 
-let symptoms=Array.from(document.querySelectorAll("input[type=checkbox]:checked")).map(cb=>cb.value);
-
-if(!name || !age){
-alert("Enter details");
+if(!name){
+alert("Enter name");
 return;
 }
 
 let disease="Skin Issue";
 
+/* GRAPH */
+let graph=`<div>Acne (60%)<div class="bar" style="width:60%"></div></div>
+<div>Eczema (40%)<div class="bar" style="width:40%"></div></div>`;
+
+/* SAVE */
 let history=JSON.parse(localStorage.getItem("patients")||"[]");
-
-history.push({name,age,disease,date:new Date().toLocaleString()});
-
+history.push({name,disease,date:new Date().toLocaleString()});
 localStorage.setItem("patients",JSON.stringify(history));
 
-document.getElementById("result").innerHTML=`
+/* REPORT FULL */
+result.innerHTML=`
 <h2 style="text-align:center;">🧾 Diagnosis Report</h2>
 
 <p>👤 <b>${name}</b></p>
-<p>🎂 ${age}</p>
+<p>🦠 Condition: ${disease}</p>
+<p>⚠️ Severity: ${severity}</p>
 
 <hr>
 
-<p>🦠 ${disease}</p>
-<p>📍 ${location}</p>
-<p>⚠️ ${severity}</p>
+${graph}
 
 <hr>
 
-<p>💊 Advice: Maintain hygiene</p>
-<p>🛡 Precautions: Avoid touching area</p>
-<p>👨‍⚕️ Visit doctor if severe</p>
+<p>💊 Advice: Maintain hygiene, avoid oily products</p>
+<p>🛡 Precautions: Avoid touching affected area</p>
+<p>👨‍⚕️ Consult doctor if severe</p>
 
 <button onclick="closePopup()">Close</button>
 `;
 
-document.getElementById("popup").style.display="flex";
+popup.style.display="flex";
 }
 
 /* DASHBOARD */
@@ -268,13 +269,12 @@ function loadDashboard(){
 
 let history=JSON.parse(localStorage.getItem("patients")||"[]");
 
-let html="<h2 style='text-align:center;'>👨‍⚕️ Doctor Dashboard</h2>";
+let html="<h2>👨‍⚕️ Doctor Dashboard</h2>";
 
 history.forEach(p=>{
 html+=`
 <div class="patient-card">
-<p>👤 <b>${p.name}</b></p>
-<p>🎂 ${p.age}</p>
+<p>👤 ${p.name}</p>
 <p>🦠 ${p.disease}</p>
 <p>📅 ${p.date}</p>
 </div>
@@ -283,12 +283,12 @@ html+=`
 
 html+=`<button onclick="closePopup()">Close</button>`;
 
-document.getElementById("result").innerHTML=html;
-document.getElementById("popup").style.display="flex";
+result.innerHTML=html;
+popup.style.display="flex";
 }
 
 function closePopup(){
-document.getElementById("popup").style.display="none";
+popup.style.display="none";
 }
 
 </script>
