@@ -1,64 +1,103 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Kalpana Skin Clinic - Pro</title>
+<title>Kalpana Skin Clinic</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
+
+/* BACKGROUND */
 body {
-  font-family: 'Segoe UI';
+  font-family: 'Segoe UI', sans-serif;
   background: linear-gradient(135deg,#0f172a,#1e3a8a);
   color:white;
+  margin:0;
   padding:20px;
 }
 
+/* CONTAINER */
 .container {
   max-width:900px;
   margin:auto;
   background:rgba(255,255,255,0.08);
+  backdrop-filter: blur(10px);
   padding:20px;
   border-radius:15px;
+  box-shadow:0 8px 30px rgba(0,0,0,0.5);
+  animation: fadeIn 0.8s ease;
 }
 
-input, select, button {
+h2 { text-align:center; }
+
+/* INPUTS */
+input, select {
   width:100%;
-  padding:10px;
-  margin:8px 0;
-  border-radius:8px;
+  padding:12px;
+  margin:10px 0;
+  border-radius:10px;
   border:none;
+  outline:none;
 }
 
+/* BUTTON */
 button {
-  background:#38bdf8;
+  width:100%;
+  padding:12px;
+  margin-top:10px;
+  border-radius:10px;
+  border:none;
+  font-weight:bold;
   cursor:pointer;
+  background:linear-gradient(90deg,#38bdf8,#06b6d4);
+  color:white;
+  transition:0.3s;
 }
 
+button:hover {
+  transform:scale(1.03);
+  box-shadow:0 0 15px #38bdf8;
+}
+
+/* SYMPTOMS GRID */
 .symptom-grid {
   display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:10px;
+  grid-template-columns: repeat(2,1fr);
+  gap:12px;
 }
 
 .symptom-item {
   display:flex;
+  align-items:center;
   gap:10px;
   padding:10px;
   background:rgba(255,255,255,0.08);
-  border-radius:8px;
+  border-radius:10px;
+  transition:0.3s;
 }
 
-.bar {
-  height:10px;
+.symptom-item:hover {
   background:#38bdf8;
-  margin:5px 0;
 }
 
+.symptom-item input {
+  width:18px;
+  height:18px;
+}
+
+/* MOBILE */
+@media(max-width:600px){
+  .symptom-grid{
+    grid-template-columns:1fr;
+  }
+}
+
+/* MODAL */
 .modal {
   display:none;
   position:fixed;
-  width:100%;
-  height:100%;
+  top:0; left:0;
+  width:100%; height:100%;
   background:rgba(0,0,0,0.8);
   justify-content:center;
   align-items:center;
@@ -68,161 +107,239 @@ button {
   background:white;
   color:black;
   padding:20px;
-  border-radius:10px;
-  max-height:80vh;
-  overflow:auto;
+  border-radius:12px;
+  width:90%;
+  max-width:600px;
+  animation: scaleUp 0.4s ease;
 }
+
+.center { text-align:center; }
+
+/* GRAPH */
+.bar {
+  height:10px;
+  background:#38bdf8;
+  margin:5px 0;
+  border-radius:5px;
+}
+
+/* LOGIN */
+.login {
+  max-width:400px;
+  margin:auto;
+  margin-top:100px;
+  background:rgba(255,255,255,0.1);
+  padding:20px;
+  border-radius:12px;
+}
+
+/* ANIMATIONS */
+@keyframes fadeIn {
+  from{opacity:0; transform:translateY(20px);}
+  to{opacity:1;}
+}
+
+@keyframes scaleUp {
+  from{transform:scale(0.8);}
+  to{transform:scale(1);}
+}
+
+.hidden { display:none; }
+
 </style>
 </head>
 
 <body>
 
-<div class="container">
+<!-- LOGIN -->
+<div id="loginPage" class="login">
+<h2>👨‍⚕️ Doctor Login</h2>
+
+<input id="username" placeholder="👤 Username">
+<input id="password" type="password" placeholder="🔒 Password">
+
+<button onclick="login()">Login</button>
+<button onclick="showPatient()">Continue as Patient</button>
+</div>
+
+<!-- APP -->
+<div id="app" class="container hidden">
 
 <h2>🧠 Kalpana Skin Clinic</h2>
 
-<input id="name" placeholder="Name">
-<input id="age" placeholder="Age">
+<input id="name" placeholder="👤 Name">
+<input id="age" placeholder="🎂 Age">
+
+<select id="location">
+<option value="">📍 Body Location</option>
+<option value="face">Face</option>
+<option value="feet">Feet</option>
+<option value="body">Full Body</option>
+</select>
+
+<select id="severity">
+<option value="">⚠️ Severity</option>
+<option value="low">Mild</option>
+<option value="medium">Moderate</option>
+<option value="high">Severe</option>
+</select>
+
+<h3>🩺 Symptoms</h3>
 
 <div class="symptom-grid">
-<label class="symptom-item"><input type="checkbox" value="itch"> Itching</label>
-<label class="symptom-item"><input type="checkbox" value="dry"> Dry Skin</label>
-<label class="symptom-item"><input type="checkbox" value="redness"> Redness</label>
-<label class="symptom-item"><input type="checkbox" value="pimple"> Pimples</label>
-<label class="symptom-item"><input type="checkbox" value="blackhead"> Blackheads</label>
-<label class="symptom-item"><input type="checkbox" value="pus"> Pus</label>
-<label class="symptom-item"><input type="checkbox" value="ring"> Ring Patch</label>
-<label class="symptom-item"><input type="checkbox" value="scaling"> Scaling</label>
-<label class="symptom-item"><input type="checkbox" value="dark"> Dark Spots</label>
+
+<div class="symptom-item"><input type="checkbox" value="itch"> Itching</div>
+<div class="symptom-item"><input type="checkbox" value="dry"> Dry Skin</div>
+
+<div class="symptom-item"><input type="checkbox" value="redness"> Redness</div>
+<div class="symptom-item"><input type="checkbox" value="pimple"> Pimples</div>
+
+<div class="symptom-item"><input type="checkbox" value="blackhead"> Blackheads</div>
+<div class="symptom-item"><input type="checkbox" value="pus"> Pus</div>
+
+<div class="symptom-item"><input type="checkbox" value="ring"> Ring Patch</div>
+<div class="symptom-item"><input type="checkbox" value="scaling"> Scaling</div>
+
+<div class="symptom-item"><input type="checkbox" value="dark"> Dark Spots</div>
+
 </div>
 
 <button onclick="analyze()">Analyze</button>
-<button onclick="loadPatients()">👨‍⚕️ Doctor Dashboard</button>
+<button id="dashboardBtn" class="hidden" onclick="loadPatients()">👨‍⚕️ Doctor Dashboard</button>
 
 </div>
 
+<!-- RESULT -->
 <div id="popup" class="modal">
-<div class="modal-content" id="result"></div>
+<div class="modal-content" id="report">
+<div id="result"></div>
+<button onclick="downloadPDF()">📄 Download PDF</button>
+<button onclick="closePopup()">Close</button>
+</div>
 </div>
 
-<!-- FIREBASE -->
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
 <script>
 
-// 🔥 PASTE YOUR CONFIG HERE
-const firebaseConfig = {
-  apiKey: "YOUR_KEY",
-  authDomain: "YOUR_PROJECT.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID"
-};
+// LOGIN
+function login(){
+let u=document.getElementById("username").value;
+let p=document.getElementById("password").value;
 
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
+if(u==="doctor" && p==="1234"){
+document.getElementById("loginPage").classList.add("hidden");
+document.getElementById("app").classList.remove("hidden");
+document.getElementById("dashboardBtn").classList.remove("hidden");
+}else{
+alert("Invalid Login ❌");
+}
+}
+
+function showPatient(){
+document.getElementById("loginPage").classList.add("hidden");
+document.getElementById("app").classList.remove("hidden");
+}
 
 // GET SYMPTOMS
 function getSymptoms(){
- return Array.from(document.querySelectorAll("input[type=checkbox]:checked"))
- .map(cb=>cb.value);
+return Array.from(document.querySelectorAll("input[type=checkbox]:checked"))
+.map(cb=>cb.value);
 }
 
-// ANALYZE + SAVE
+// ANALYZE
 function analyze(){
 
 let name=document.getElementById("name").value;
-let age=document.getElementById("age").value;
+
 let symptoms=getSymptoms();
+let severity=document.getElementById("severity").value;
 
-let disease="General Skin Issue";
+let scores={eczema:0,acne:0,fungal:0,bacterial:0,pigmentation:0};
 
-if(symptoms.includes("pimple")) disease="Acne";
-if(symptoms.includes("ring")) disease="Fungal Infection";
-if(symptoms.includes("itch")) disease="Eczema";
-
-// SAVE
-db.collection("patients").add({
- name, age, disease,
- date:new Date().toLocaleString()
+symptoms.forEach(s=>{
+if(["itch","dry","redness"].includes(s)) scores.eczema+=2;
+if(["pimple","blackhead"].includes(s)) scores.acne+=2;
+if(["ring","scaling"].includes(s)) scores.fungal+=3;
+if(["pus"].includes(s)) scores.bacterial+=3;
+if(["dark"].includes(s)) scores.pigmentation+=2;
 });
+
+let total=Object.values(scores).reduce((a,b)=>a+b,0);
+let disease=Object.keys(scores).reduce((a,b)=>scores[a]>scores[b]?a:b);
+
+let names={
+eczema:"Eczema",
+acne:"Acne",
+fungal:"Fungal Infection",
+bacterial:"Bacterial Infection",
+pigmentation:"Pigmentation"
+};
+
+// GRAPH
+let graph="";
+for(let key in scores){
+let percent=total?Math.round((scores[key]/total)*100):0;
+graph+=`<div>${names[key]} (${percent}%)<div class="bar" style="width:${percent}%"></div></div>`;
+}
 
 document.getElementById("result").innerHTML=`
-<h3>Diagnosis</h3>
-<p>${disease}</p>
-<button onclick="closePopup()">Close</button>
+<div class="center"><h3>🧾 Diagnosis Report</h3></div>
+<p><b>👤 Name:</b> ${name}</p>
+<p><b>🦠 Condition:</b> ${names[disease]}</p>
+${graph}
+<p style="color:red;">⚠ Not a medical diagnosis</p>
 `;
 
 document.getElementById("popup").style.display="flex";
 }
 
-// DASHBOARD
+// 🔥 DOCTOR DASHBOARD (CARDS)
 function loadPatients(){
 
-let html="<h2>👨‍⚕️ Dashboard</h2>";
-
-db.collection("patients").get().then(snapshot=>{
-
-let counts={};
-
-snapshot.forEach(doc=>{
-
-let p=doc.data();
-counts[p.disease]=(counts[p.disease]||0)+1;
-
-html+=`
-<div style="background:#fff;color:#000;padding:10px;margin:10px;border-radius:8px;">
-<p><b>${p.name}</b></p>
-<p>${p.disease}</p>
-
-<button onclick="deletePatient('${doc.id}')">❌ Delete</button>
-<button onclick="editPatient('${doc.id}','${p.name}','${p.age}')">✏ Edit</button>
+let html = `
+<div class="center">
+<h2>👨‍⚕️ Doctor Dashboard</h2>
+<p style="color:gray;">Patient Records</p>
 </div>
+
+<div style="max-height:400px; overflow-y:auto; margin-top:15px;">
 `;
 
+let history = JSON.parse(localStorage.getItem("patients") || "[]");
+
+history.forEach(p=>{
+html += `
+<div style="
+background:#f8fafc;
+padding:15px;
+margin:10px 0;
+border-radius:10px;
+box-shadow:0 4px 10px rgba(0,0,0,0.1);
+animation:fadeIn 0.5s ease;
+">
+<p><b>👤 ${p.name}</b></p>
+<p>🎂 Age: ${p.age}</p>
+<p>🦠 ${p.disease}</p>
+<p>📅 ${p.date}</p>
+</div>
+`;
 });
 
-// ANALYTICS
-html+="<h3>📊 Analytics</h3>";
+html += `</div>`;
 
-for(let d in counts){
-html+=`<p>${d} (${counts[d]})</p>
-<div class="bar" style="width:${counts[d]*30}px"></div>`;
-}
-
-document.getElementById("result").innerHTML=html;
+document.getElementById("result").innerHTML = html;
 document.getElementById("popup").style.display="flex";
-
-});
-
-}
-
-// DELETE
-function deletePatient(id){
-db.collection("patients").doc(id).delete().then(()=>{
-alert("Deleted");
-loadPatients();
-});
-}
-
-// EDIT
-function editPatient(id,name,age){
-
-let newName=prompt("Edit Name",name);
-let newAge=prompt("Edit Age",age);
-
-db.collection("patients").doc(id).update({
- name:newName,
- age:newAge
-}).then(()=>{
-alert("Updated");
-loadPatients();
-});
-
 }
 
 // CLOSE
 function closePopup(){
 document.getElementById("popup").style.display="none";
+}
+
+// PDF
+function downloadPDF(){
+html2pdf().from(document.getElementById("report")).save();
 }
 
 </script>
