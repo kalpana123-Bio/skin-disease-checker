@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Kalpana Skin Clinic - Pro System</title>
+<title>Kalpana Skin Clinic - Secure System</title>
 
 <style>
 body {
@@ -50,7 +50,6 @@ label {
   border-radius:8px;
 }
 
-/* uniform checkbox */
 input[type="checkbox"]{
   width:16px;
   height:16px;
@@ -84,7 +83,6 @@ button {
 
 .center { text-align:center; }
 
-/* graph */
 .bar {
   height:10px;
   background:#38bdf8;
@@ -138,7 +136,9 @@ button {
 </div>
 
 <button onclick="analyze()">Analyze</button>
-<button onclick="showHistory()">View Patient History</button>
+
+<!-- 🔐 Doctor only -->
+<button onclick="secureHistory()">Doctor Login</button>
 
 </div>
 
@@ -186,7 +186,7 @@ if(location==="face") scores.acne+=2;
 if(location==="feet") scores.fungal+=2;
 if(severity==="high") scores.bacterial+=2;
 
-// calculate percentage
+// % calculation
 let total = Object.values(scores).reduce((a,b)=>a+b,0);
 
 let percentages = {};
@@ -194,7 +194,7 @@ for(let key in scores){
  percentages[key] = total ? Math.round((scores[key]/total)*100) : 0;
 }
 
-// get max disease
+// max disease
 let disease = Object.keys(scores).reduce((a,b)=>scores[a]>scores[b]?a:b);
 
 let diseasesName = {
@@ -205,7 +205,7 @@ bacterial:"Bacterial Infection",
 pigmentation:"Pigmentation"
 };
 
-// SAVE HISTORY
+// SAVE (hidden from user)
 let record = {
  name, age, disease:diseasesName[disease], date:new Date().toLocaleString()
 };
@@ -245,21 +245,30 @@ ${graphHTML}
 document.getElementById("popup").style.display="flex";
 }
 
-// HISTORY
-function showHistory(){
- let history = JSON.parse(localStorage.getItem("patients") || "[]");
- let html = "<h3>Patient History</h3>";
+// 🔐 SECURE HISTORY (ONLY YOU)
+function secureHistory(){
 
- history.forEach(p=>{
-   html += `<p>${p.name} | ${p.disease} | ${p.date}</p>`;
- });
+let password = prompt("Enter Doctor Password");
 
- document.getElementById("result").innerHTML = html;
- document.getElementById("popup").style.display="flex";
+if(password !== "admin123"){   // change password here
+  alert("Access Denied ❌");
+  return;
+}
+
+let history = JSON.parse(localStorage.getItem("patients") || "[]");
+
+let html = "<h3>🔐 Patient History</h3>";
+
+history.forEach(p=>{
+ html += `<p>${p.name} | ${p.disease} | ${p.date}</p>`;
+});
+
+document.getElementById("result").innerHTML = html;
+document.getElementById("popup").style.display="flex";
 }
 
 function downloadPDF(){
- html2pdf().from(document.getElementById("report")).save();
+ html2pdf().from(document.getElementById("report")).save("Diagnosis.pdf");
 }
 
 function closePopup(){
