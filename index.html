@@ -2,43 +2,49 @@
 
 window.onload = function(){
 
-const home = document.getElementById("home");
-const patient = document.getElementById("patient");
-const loginBox = document.getElementById("login");
-const popup = document.getElementById("popup");
-const output = document.getElementById("output");
+function safe(id){
+  return document.getElementById(id) || {};
+}
 
-// NAV
+const home = safe("home");
+const patient = safe("patient");
+const loginBox = safe("login");
+const popup = safe("popup");
+const output = safe("output");
+
+/* NAV */
 window.openPatient = function(){
-  home.style.display="none";
-  patient.style.display="block";
+  if(home.style) home.style.display="none";
+  if(patient.style) patient.style.display="block";
 }
 
 window.openDoctor = function(){
-  home.style.display="none";
-  loginBox.style.display="block";
+  if(home.style) home.style.display="none";
+  if(loginBox.style) loginBox.style.display="block";
 }
 
 window.goHome = function(){
   location.reload();
 }
 
-// ANALYZE
+/* ANALYZE */
 window.analyze = function(){
 
-  let name = document.getElementById("name").value;
+  let name = safe("name").value;
   if(!name){ alert("Enter name"); return; }
 
-  let body = document.getElementById("body").value;
-  let severity = document.getElementById("severity").value;
-  let duration = document.getElementById("duration").value;
+  let body = safe("body").value;
+  let severity = safe("severity").value;
+  let duration = safe("duration").value;
 
+  let checkboxes = document.querySelectorAll(".grid input[type='checkbox']");
   let symptoms = [];
-  document.querySelectorAll(".grid input[type='checkbox']").forEach(cb=>{
+
+  checkboxes.forEach(cb=>{
     if(cb.checked) symptoms.push(cb.value);
   });
 
-  if(symptoms.length===0){
+  if(symptoms.length === 0){
     alert("Select symptoms");
     return;
   }
@@ -51,7 +57,9 @@ window.analyze = function(){
     if(s==="ring" || s==="scale") scores.fungal+=3;
   });
 
-  let disease="eczema", max=-1;
+  let disease="eczema";
+  let max=-1;
+
   for(let k in scores){
     if(scores[k]>max){
       max=scores[k];
@@ -94,14 +102,20 @@ window.analyze = function(){
   popup.style.display="flex";
 
   let data = JSON.parse(localStorage.getItem("patients")||"[]");
-  data.push({name,disease:names[disease],date:new Date().toLocaleString()});
-  localStorage.setItem("patients",JSON.stringify(data));
+  data.push({
+    name,
+    disease:names[disease],
+    date:new Date().toLocaleString()
+  });
+
+  localStorage.setItem("patients", JSON.stringify(data));
 }
 
-// LOGIN
+/* LOGIN */
 window.login = function(){
-  let u = document.getElementById("user").value;
-  let p = document.getElementById("pass").value;
+
+  let u = safe("user").value;
+  let p = safe("pass").value;
 
   if(u==="doctor" && p==="1234"){
     loadDashboard();
@@ -110,12 +124,16 @@ window.login = function(){
   }
 }
 
-// DASHBOARD
+/* DASHBOARD */
 function loadDashboard(){
 
   let data = JSON.parse(localStorage.getItem("patients")||"[]");
 
   let html = "<h2 style='text-align:center;'>👨‍⚕️ Dashboard</h2>";
+
+  if(data.length === 0){
+    html += "<p>No records found</p>";
+  }
 
   data.forEach(p=>{
     html += `
@@ -133,12 +151,12 @@ function loadDashboard(){
   popup.style.display="flex";
 }
 
-// PDF
+/* PDF */
 window.download = function(){
   window.print();
 }
 
-// CLOSE
+/* CLOSE */
 window.closePopup = function(){
   popup.style.display="none";
   location.reload();
