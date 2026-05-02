@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kalpana Skin Clinic | Dark Edition</title>
-    <!-- Fonts -->
+    <title>Kalpana Skin Clinic | Bangalore</title>
+    <!-- Modern UI Fonts -->
     <link href="https://googleapis.com" rel="stylesheet">
     <script src="https://cloudflare.com"></script>
     <style>
@@ -25,20 +25,17 @@
         .page { display: none; animation: fadeIn 0.4s ease; }
         .active { display: block; }
 
-        /* Professional Dark Cards */
-        .card { background: var(--card); border-radius: 16px; padding: 30px; border: 1px solid var(--border); }
+        /* Professional Dark Theme Components */
+        .card { background: var(--card); border-radius: 16px; padding: 30px; border: 1px solid var(--border); box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
         .hero { text-align: center; padding: 80px 20px; }
-        h1 { font-size: 2.5rem; color: var(--primary); }
+        h1 { font-size: 2.5rem; color: var(--primary); margin: 0; }
 
-        /* Form Elements */
         input, select {
             width: 100%; padding: 14px; margin: 10px 0 20px 0; 
             border: 1px solid var(--border); border-radius: 10px; 
             background: #0f172a; color: white;
         }
 
-        /* Buttons */
-        .btn-group { display: flex; gap: 15px; justify-content: center; margin-top: 30px; }
         button { padding: 14px 28px; border: none; border-radius: 10px; cursor: pointer; font-weight: 700; transition: 0.3s; }
         .btn-primary { background: var(--primary); color: #0f172a; }
         .btn-outline { background: transparent; border: 1px solid var(--primary); color: var(--primary); }
@@ -49,25 +46,33 @@
         .stat-card { background: var(--card); padding: 20px; border-radius: 12px; border: 1px solid var(--border); text-align: center; }
         .stat-val { font-size: 2.2rem; font-weight: 800; color: var(--primary); }
 
-        /* Prescription Styling (The Realistic White Doc) */
+        /* Prescription (The Medical Paper) */
         #rx-print-area { 
             background: white; 
             color: #111; 
             padding: 50px; 
             position: relative;
-            box-shadow: 0 0 20px rgba(0,0,0,0.2);
+            min-height: 800px;
         }
-        .rx-header { border-bottom: 3px solid #2563eb; padding-bottom: 15px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: flex-end; }
-        .rx-symbol { font-family: 'Playfair Display', serif; font-size: 40px; color: #2563eb; margin: 20px 0; }
-        .signature-font { font-family: 'Dancing Script', crossorigin; font-size: 28px; color: #1e40af; margin: 0; }
-        .watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg); font-size: 80px; color: rgba(0,0,0,0.03); pointer-events: none; white-space: nowrap; font-weight: 800; }
+        .rx-header { border-bottom: 3px solid #1e3a8a; padding-bottom: 15px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: flex-end; }
+        .rx-symbol { font-family: 'Playfair Display', serif; font-size: 45px; color: #1e3a8a; margin: 20px 0; }
+        
+        /* Mathilde-style signature: High-end handwritten look */
+        .signature-mathilde { 
+            font-family: 'Great Vibes', cursive; 
+            font-size: 38px; 
+            color: #1e40af; 
+            margin: 0; 
+            font-weight: 400;
+        }
+        
+        .watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg); font-size: 70px; color: rgba(0,0,0,0.02); pointer-events: none; white-space: nowrap; font-weight: 800; }
 
-        /* Modals */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: none; justify-content: center; align-items: center; z-index: 1000; overflow-y: auto; padding: 20px; }
-        .modal-content { background: var(--card); width: 100%; max-width: 700px; border-radius: 20px; border: 1px solid var(--border); }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); display: none; justify-content: center; align-items: start; z-index: 1000; overflow-y: auto; padding: 40px 20px; }
+        .modal-content { background: var(--card); width: 100%; max-width: 750px; border-radius: 20px; border: 1px solid var(--border); margin-bottom: 40px; }
 
         table { width: 100%; border-collapse: collapse; }
-        th { text-align: left; color: var(--text-muted); font-size: 0.85rem; padding: 10px; }
+        th { text-align: left; color: var(--text-muted); padding: 10px; font-size: 0.8rem; }
         td { padding: 15px 10px; border-bottom: 1px solid var(--border); }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
@@ -76,116 +81,128 @@
 <body>
 
 <div class="container">
-    <!-- HOME SELECTION -->
+    <!-- SCREEN 1: SELECTION -->
     <div id="screen-home" class="page active hero">
         <h1>🏥 Kalpana Skin Clinic</h1>
-        <p style="color: var(--text-muted);">Precision Care for Your Skin</p>
+        <p style="color: var(--text-muted);">Dermatology & Aesthetic Excellence</p>
         <div class="btn-group">
-            <button class="btn-primary" onclick="navigateTo('screen-patient')">Register as Patient</button>
-            <button class="btn-outline" onclick="navigateTo('screen-login')">Doctor Login</button>
+            <button class="btn-primary" onclick="navigateTo('screen-patient')">Patient Entry</button>
+            <button class="btn-outline" onclick="navigateTo('screen-login')">Doctor Access</button>
         </div>
     </div>
 
-    <!-- PATIENT FORM -->
+    <!-- SCREEN 2: PATIENT FORM -->
     <div id="screen-patient" class="page">
         <div class="card" style="max-width: 600px; margin: auto;">
-            <h2 style="margin-top:0">Patient Portal</h2>
-            <input type="text" id="p-name" placeholder="Patient Name">
+            <h2 style="margin-top:0">New Consultation</h2>
+            <label style="font-size: 0.8rem; color: var(--text-muted);">PATIENT NAME</label>
+            <input type="text" id="p-name" placeholder="Enter Full Name">
+            
             <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                <input type="number" id="p-age" placeholder="Age">
-                <select id="p-severity">
-                    <option value="Low">Low Priority</option>
-                    <option value="Medium">Medium</option>
-                    <option value="High">Emergency</option>
-                </select>
+                <div>
+                    <label style="font-size: 0.8rem; color: var(--text-muted);">AGE</label>
+                    <input type="number" id="p-age" placeholder="Age">
+                </div>
+                <div>
+                    <label style="font-size: 0.8rem; color: var(--text-muted);">SEVERITY</label>
+                    <select id="p-severity">
+                        <option value="Low">Low</option>
+                        <option value="Medium">Medium</option>
+                        <option value="High">Urgent</option>
+                    </select>
+                </div>
             </div>
-            <select id="p-symptom">
-                <option value="General">Select Condition...</option>
-                <option value="Acne">Severe Acne / Pimples</option>
-                <option value="Fungal">Fungal Infection / Rings</option>
-                <option value="Eczema">Eczema / Itchy Rash</option>
-            </select>
-            <button class="btn-primary" style="width:100%" onclick="processPatient()">Analyze & Generate Rx</button>
-            <button class="btn-outline" style="width:100%; margin-top: 10px;" onclick="navigateTo('screen-home')">Cancel</button>
-        </div>
-    </div>
 
-    <!-- DOCTOR LOGIN -->
-    <div id="screen-login" class="page">
-        <div class="card" style="max-width: 400px; margin: auto; text-align: center;">
-            <h2>Medical Login</h2>
-            <input type="text" id="login-user" placeholder="Username">
-            <input type="password" id="login-pass" placeholder="Password">
-            <button class="btn-primary" style="width:100%" onclick="handleLogin()">Sign In</button>
+            <label style="font-size: 0.8rem; color: var(--text-muted);">PRIMARY CONCERN</label>
+            <select id="p-symptom">
+                <option value="General">General Skin Issue</option>
+                <option value="Acne">Acne / Breakouts</option>
+                <option value="Fungal">Itchy / Fungal Infection</option>
+                <option value="Eczema">Rash / Dry Eczema</option>
+            </select>
+
+            <button class="btn-primary" style="width:100%" onclick="processPatient()">Generate Prescription</button>
             <button class="btn-outline" style="width:100%; margin-top: 10px;" onclick="navigateTo('screen-home')">Back</button>
         </div>
     </div>
 
-    <!-- DASHBOARD -->
+    <!-- SCREEN 3: DOCTOR LOGIN -->
+    <div id="screen-login" class="page">
+        <div class="card" style="max-width: 400px; margin: auto; text-align: center;">
+            <h2>Secure Login</h2>
+            <input type="text" id="login-user" placeholder="Username">
+            <input type="password" id="login-pass" placeholder="Password">
+            <button class="btn-primary" style="width:100%" onclick="handleLogin()">Authorize Access</button>
+            <button class="btn-outline" style="width:100%; margin-top: 10px;" onclick="navigateTo('screen-home')">Back</button>
+        </div>
+    </div>
+
+    <!-- SCREEN 4: DASHBOARD -->
     <div id="screen-dashboard" class="page">
         <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
-            <h2>👨‍⚕️ Dr. Kalpana's Dashboard</h2>
+            <h2>👨‍⚕️ Welcome, Dr. Kalpana</h2>
             <button class="btn-outline" onclick="logout()">Logout</button>
         </div>
         <div class="stat-grid" id="stats-container"></div>
         <div class="card">
-            <h3>Recent Patients</h3>
-            <table id="patient-table">
-                <thead><tr><th>Name</th><th>Diagnosis</th><th>Severity</th><th>Details</th></tr></thead>
+            <h3>Recent Patients (Top 5)</h3>
+            <table>
+                <thead><tr><th>Name</th><th>Diagnosis</th><th>Priority</th><th>Details</th></tr></thead>
                 <tbody id="patient-list"></tbody>
             </table>
         </div>
     </div>
 </div>
 
-<!-- MODAL: THE BEST PRESCRIPTION -->
+<!-- MODAL: THE PROFESSIONAL PRESCRIPTION -->
 <div id="modal-rx" class="modal-overlay">
     <div class="modal-content">
         <div id="rx-print-area">
             <div class="watermark">KALPANA SKIN CLINIC</div>
             <div class="rx-header">
                 <div>
-                    <h1 style="color:#2563eb; margin:0; font-size: 28px;">KALPANA SKIN CLINIC</h1>
+                    <h1 style="color:#1e3a8a; margin:0; font-size: 30px; letter-spacing: 1px;">KALPANA SKIN CLINIC</h1>
                     <p style="margin:0; font-weight: 700; font-size: 16px;">Dr. Mrs. Kalpana Bharath</p>
-                    <p style="margin:0; font-size: 11px; color: #555;">MBBS, MD - Dermatology | Reg: KSC/2024/09</p>
+                    <p style="margin:2px 0 0 0; font-size: 11px; color: #444;">Dermatologist | Bangalore, Karnataka</p>
                 </div>
-                <div style="text-align: right; font-size: 12px;">
-                    <p style="margin:0;">📍 123 Healthcare Ave, Clinic Block</p>
-                    <p style="margin:0;">📞 +91 98765 43210</p>
+                <div style="text-align: right; font-size: 12px; color: #444;">
+                    <p style="margin:0;">📍 Bangalore, Karnataka</p>
+                    <p style="margin:0;">📞 +91 9380450580</p>
                 </div>
             </div>
             
-            <div style="display: flex; justify-content: space-between; margin-bottom: 20px; font-size: 14px;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 25px; padding: 10px; background: #f8fafc; border-radius: 5px; font-size: 14px;">
                 <div><b>Patient:</b> <span id="rx-name"></span></div>
-                <div><b>Age/Sex:</b> <span id="rx-age"></span></div>
+                <div><b>Age:</b> <span id="rx-age"></span></div>
                 <div><b>Date:</b> <span id="rx-date"></span></div>
             </div>
 
-            <div class="rx-symbol">Rx</div>
+            <div class="rx-symbol">℞</div>
             
-            <div id="rx-body" style="min-height: 200px; line-height: 1.8;">
+            <div id="rx-body" style="min-height: 300px; line-height: 1.8; font-size: 15px; color: #333;">
                 <!-- Content injected here -->
             </div>
 
-            <div style="margin-top: 50px; display: flex; justify-content: flex-end; text-align: center;">
+            <div style="margin-top: 60px; display: flex; justify-content: flex-end; text-align: center;">
                 <div>
-                    <p class="signature-font">Kalpana</p>
-                    <div style="border-top: 1px solid #111; width: 150px; margin-top: 5px;"></div>
-                    <p style="font-size: 11px; font-weight: bold; margin-top: 5px;">Dr. Mrs. Kalpana Bharath</p>
+                    <p class="signature-mathilde">Kalpana</p>
+                    <div style="border-top: 2px solid #1e3a8a; width: 180px; margin-top: -5px;"></div>
+                    <p style="font-size: 11px; font-weight: 800; margin-top: 5px; color: #1e3a8a;">Dr. Mrs. Kalpana Bharath</p>
                 </div>
             </div>
         </div>
-        <div style="padding: 20px; background: #111; text-align: right;">
+        <div style="padding: 20px; background: #0f172a; text-align: right; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px;">
             <button class="btn-primary" onclick="downloadPrescription()">Download PDF</button>
             <button class="btn-outline" onclick="closeModals()">Close</button>
         </div>
     </div>
 </div>
 
+<!-- MODAL: DOCTOR VIEW DETAILS -->
 <div id="modal-details" class="modal-overlay">
     <div class="modal-content" style="padding: 30px;">
         <div id="detail-content"></div>
-        <button class="btn-primary" style="margin-top:20px; width:100%" onclick="closeModals()">Back to List</button>
+        <button class="btn-primary" style="margin-top:20px; width:100%" onclick="closeModals()">Back to Dashboard</button>
     </div>
 </div>
 
@@ -196,33 +213,38 @@
     }
 
     function processPatient() {
-        const name = document.getElementById('p-name').value;
+        const name = document.getElementById('p-name').value.trim();
         const age = document.getElementById('p-age').value;
         const severity = document.getElementById('p-severity').value;
         const symptom = document.getElementById('p-symptom').value;
 
-        if(!name || !age) return alert("Missing Details");
+        if(!name || !age) return alert("Please complete patient details.");
 
-        const diagMap = { "Acne": "Acne Vulgaris (Grade II)", "Fungal": "Tinea Corporis Infection", "Eczema": "Atopic Dermatitis", "General": "Skin Observation" };
+        const diagMap = { "Acne": "Acne Vulgaris", "Fungal": "Tinea Corporis Infection", "Eczema": "Eczema / Dermatitis", "General": "Skin Consultation" };
         const diagnosis = diagMap[symptom];
         const date = new Date().toLocaleDateString();
 
-        const data = JSON.parse(localStorage.getItem('clinic_pro') || '[]');
+        const data = JSON.parse(localStorage.getItem('clinic_final') || '[]');
         const pId = Date.now();
         data.push({ name, age, severity, symptom, diagnosis, date, id: pId });
-        localStorage.setItem('clinic_pro', JSON.stringify(data));
+        localStorage.setItem('clinic_final', JSON.stringify(data));
 
         document.getElementById('rx-name').innerText = name;
-        document.getElementById('rx-age').innerText = age + "Y";
+        document.getElementById('rx-age').innerText = age;
         document.getElementById('rx-date').innerText = date;
         document.getElementById('rx-body').innerHTML = `
-            <p><b>Diagnosis:</b> ${diagnosis}</p>
-            <p style="margin-top:20px;"><b>Medications:</b></p>
-            <p>1. Topical Cream (Apply twice daily for 2 weeks)<br>
-               2. Mild Cleanser (Morning and Evening)<br>
-               3. Sun Protection Factor (SPF 50+)</p>
-            <p style="margin-top:20px;"><b>Clinical Notes:</b><br>
-            Avoid picking or scratching. Maintain proper hydration and diet.</p>
+            <p style="font-size: 18px; font-weight: 600;">Diagnosis: ${diagnosis}</p>
+            <div style="margin-top:30px;">
+                <p><b>Medication / Plan:</b></p>
+                <ol>
+                    <li>Apply medication strictly as directed to the affected area.</li>
+                    <li>Avoid direct sun exposure. Use protective clothing.</li>
+                    <li>Follow up in 10 days for assessment.</li>
+                </ol>
+            </div>
+            <div style="margin-top:40px; padding: 15px; border-left: 4px solid #1e3a8a; background: #f1f5f9;">
+                <b>Note:</b> Maintain adequate hydration and avoid any irritants.
+            </div>
         `;
         document.getElementById('modal-rx').style.display = 'flex';
     }
@@ -236,17 +258,17 @@
     }
 
     function loadDashboard() {
-        const data = JSON.parse(localStorage.getItem('clinic_pro') || '[]');
+        const data = JSON.parse(localStorage.getItem('clinic_final') || '[]');
         const today = new Date().toLocaleDateString();
         const todayData = data.filter(p => p.date === today);
         const counts = { Low: 0, Medium: 0, High: 0 };
         todayData.forEach(p => counts[p.severity]++);
 
         document.getElementById('stats-container').innerHTML = `
-            <div class="stat-card"><div class="stat-val">${todayData.length}</div>New Patients</div>
-            <div class="stat-card" style="border-bottom: 4px solid var(--success)"><div class="stat-val">${counts.Low}</div>Stable</div>
-            <div class="stat-card" style="border-bottom: 4px solid #f59e0b"><div class="stat-val">${counts.Medium}</div>Moderate</div>
-            <div class="stat-card" style="border-bottom: 4px solid var(--danger)"><div class="stat-val">${counts.High}</div>Critical</div>
+            <div class="stat-card"><div class="stat-val">${todayData.length}</div>Today's Total</div>
+            <div class="stat-card" style="border-top: 4px solid var(--success)"><div class="stat-val">${counts.Low}</div>Stable</div>
+            <div class="stat-card" style="border-top: 4px solid orange"><div class="stat-val">${counts.Medium}</div>Active</div>
+            <div class="stat-card" style="border-top: 4px solid var(--danger)"><div class="stat-val">${counts.High}</div>Urgent</div>
         `;
 
         const recent = data.slice(-5).reverse();
@@ -254,22 +276,23 @@
             <tr>
                 <td><b>${p.name}</b></td>
                 <td>${p.diagnosis}</td>
-                <td><span style="color:${p.severity === 'High' ? 'var(--danger)' : 'var(--text-main)'}">${p.severity}</span></td>
-                <td><button onclick="showDetails(${p.id})" class="btn-outline" style="padding:5px 10px; font-size:11px">DETAILS</button></td>
+                <td style="color:${p.severity==='High'?'var(--danger)':'inherit'}">${p.severity}</td>
+                <td><button onclick="showDetails(${p.id})" class="btn-outline" style="padding:5px 12px; font-size:11px">VIEW</button></td>
             </tr>
-        `).join('') || "<tr><td colspan='4'>Empty Record</td></tr>";
+        `).join('') || "<tr><td colspan='4'>No records found.</td></tr>";
     }
 
     function showDetails(id) {
-        const p = JSON.parse(localStorage.getItem('clinic_pro')).find(x => x.id === id);
+        const p = JSON.parse(localStorage.getItem('clinic_final')).find(x => x.id === id);
         document.getElementById('detail-content').innerHTML = `
-            <h2 style="color:var(--primary)">Clinical Record</h2>
-            <hr border="1" color="#333">
-            <p><b>Name:</b> ${p.name}</p>
-            <p><b>Age:</b> ${p.age}</p>
-            <p><b>Condition:</b> ${p.diagnosis}</p>
-            <p><b>Severity:</b> ${p.severity}</p>
-            <p><b>Visit Date:</b> ${p.date}</p>
+            <h2 style="color:var(--primary); margin-top:0;">Patient Record</h2>
+            <div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 10px;">
+                <p><b>Name:</b> ${p.name}</p>
+                <p><b>Age:</b> ${p.age}</p>
+                <p><b>Condition:</b> ${p.diagnosis}</p>
+                <p><b>Visit Date:</b> ${p.date}</p>
+                <p><b>Status:</b> ${p.severity}</p>
+            </div>
         `;
         document.getElementById('modal-details').style.display = 'flex';
     }
@@ -278,7 +301,7 @@
     function logout() { navigateTo('screen-home'); }
     function downloadPrescription() {
         const element = document.getElementById('rx-print-area');
-        html2pdf().from(element).set({ margin: 0.5, filename: 'KalpanaClinic_Rx.pdf' }).save();
+        html2pdf().from(element).set({ margin: 0, filename: 'KSC_Prescription.pdf', html2canvas: { scale: 2 } }).save();
     }
 </script>
 
