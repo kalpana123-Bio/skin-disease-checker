@@ -1,167 +1,304 @@
-<script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalpana Skin Clinic | Dark Edition</title>
+    <script src="https://cloudflare.com"></script>
+    <style>
+        :root {
+            --primary: #38bdf8; /* Sky Blue */
+            --bg: #0f172a;      /* Dark Slate */
+            --card: #1e293b;    /* Lighter Slate */
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --border: #334155;
+            --success: #22c55e;
+            --danger: #ef4444;
+        }
 
-window.onload = function(){
+        * { box-sizing: border-box; font-family: 'Inter', system-ui, sans-serif; }
+        
+        body { 
+            margin: 0; 
+            background-color: var(--bg); 
+            color: var(--text-main); 
+            line-height: 1.6;
+            min-height: 100vh;
+        }
 
-function safe(id){
-  return document.getElementById(id) || {};
-}
+        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+        .page { display: none; animation: fadeIn 0.4s ease; }
+        .active { display: block; }
 
-const home = safe("home");
-const patient = safe("patient");
-const loginBox = safe("login");
-const popup = safe("popup");
-const output = safe("output");
+        /* Professional Dark Cards */
+        .card { 
+            background: var(--card); 
+            border-radius: 16px; 
+            padding: 30px; 
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.3); 
+            border: 1px solid var(--border); 
+        }
 
-/* NAV */
-window.openPatient = function(){
-  if(home.style) home.style.display="none";
-  if(patient.style) patient.style.display="block";
-}
+        .hero { text-align: center; padding: 80px 20px; }
+        h1 { font-size: 2.5rem; letter-spacing: -1px; margin-bottom: 10px; color: var(--primary); }
 
-window.openDoctor = function(){
-  if(home.style) home.style.display="none";
-  if(loginBox.style) loginBox.style.display="block";
-}
+        /* Form Elements */
+        input, select {
+            width: 100%; padding: 14px; margin: 10px 0 20px 0; 
+            border: 1px solid var(--border); border-radius: 10px; 
+            background: #0f172a; color: white; font-size: 1rem;
+        }
+        input:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.2); }
 
-window.goHome = function(){
-  location.reload();
-}
+        /* Buttons */
+        .btn-group { display: flex; gap: 15px; justify-content: center; margin-top: 30px; }
+        button { 
+            padding: 14px 28px; border: none; border-radius: 10px; cursor: pointer; 
+            font-weight: 700; transition: all 0.3s; font-size: 1rem;
+        }
+        .btn-primary { background: var(--primary); color: #0f172a; }
+        .btn-outline { background: transparent; border: 1px solid var(--primary); color: var(--primary); }
+        button:hover { transform: translateY(-2px); filter: brightness(1.1); }
 
-/* ANALYZE */
-window.analyze = function(){
+        /* Dashboard Stats */
+        .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .stat-card { background: var(--card); padding: 20px; border-radius: 12px; border: 1px solid var(--border); text-align: center; }
+        .stat-val { font-size: 2.2rem; font-weight: 800; color: var(--primary); }
 
-  let name = safe("name").value;
-  if(!name){ alert("Enter name"); return; }
+        /* Modals */
+        .modal-overlay { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.8); display: none; justify-content: center; align-items: center; z-index: 1000;
+        }
+        .modal-content { background: var(--card); width: 90%; max-width: 600px; border-radius: 20px; overflow: hidden; border: 1px solid var(--border); }
+        
+        /* The Prescription itself stays white for printing */
+        #rx-print-area { background: white; color: #111; padding: 40px; border-radius: 10px; }
 
-  let body = safe("body").value;
-  let severity = safe("severity").value;
-  let duration = safe("duration").value;
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th { text-align: left; color: var(--text-muted); font-size: 0.85rem; padding: 10px; text-transform: uppercase; }
+        td { padding: 15px 10px; border-bottom: 1px solid var(--border); }
 
-  let checkboxes = document.querySelectorAll(".grid input[type='checkbox']");
-  let symptoms = [];
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
 
-  checkboxes.forEach(cb=>{
-    if(cb.checked) symptoms.push(cb.value);
-  });
-
-  if(symptoms.length === 0){
-    alert("Select symptoms");
-    return;
-  }
-
-  let scores = {eczema:0, acne:0, fungal:0};
-
-  symptoms.forEach(s=>{
-    if(s==="itch" || s==="dry") scores.eczema+=2;
-    if(s==="pimple" || s==="black") scores.acne+=2;
-    if(s==="ring" || s==="scale") scores.fungal+=3;
-  });
-
-  let disease="eczema";
-  let max=-1;
-
-  for(let k in scores){
-    if(scores[k]>max){
-      max=scores[k];
-      disease=k;
-    }
-  }
-
-  let names={
-    eczema:"Eczema",
-    acne:"Acne",
-    fungal:"Fungal Infection"
-  };
-
-  let total = scores.eczema + scores.acne + scores.fungal;
-  let graph="";
-
-  for(let k in scores){
-    let p = total?Math.round(scores[k]/total*100):0;
-    graph += names[k]+" ("+p+"%)<div class='bar' style='width:"+p+"%'></div>";
-  }
-
-  output.innerHTML = `
-  <h2 style="text-align:center;">🧾 Report</h2>
-  <p>👤 ${name}</p>
-  <p>🦠 ${names[disease]}</p>
-  <p>⚠️ ${severity}</p>
-  <p>📍 ${body}</p>
-  <p>⏳ ${duration}</p>
-  <hr>
-  ${graph}
-  <hr>
-  <p>💊 Advice: Keep skin clean</p>
-  <p>🛡 Precautions: Avoid touching infected area</p>
-  <p>⏳ Recovery: 1-2 weeks</p>
-  <p>👨‍⚕️ Consult doctor if severe</p>
-  <button onclick="download()">📄 Download PDF</button>
-  <button onclick="closePopup()">Close</button>
-  `;
-
-  popup.style.display="flex";
-
-  let data = JSON.parse(localStorage.getItem("patients")||"[]");
-  data.push({
-    name,
-    disease:names[disease],
-    date:new Date().toLocaleString()
-  });
-
-  localStorage.setItem("patients", JSON.stringify(data));
-}
-
-/* LOGIN */
-window.login = function(){
-
-  let u = safe("user").value;
-  let p = safe("pass").value;
-
-  if(u==="doctor" && p==="1234"){
-    loadDashboard();
-  } else {
-    alert("Wrong login");
-  }
-}
-
-/* DASHBOARD */
-function loadDashboard(){
-
-  let data = JSON.parse(localStorage.getItem("patients")||"[]");
-
-  let html = "<h2 style='text-align:center;'>👨‍⚕️ Dashboard</h2>";
-
-  if(data.length === 0){
-    html += "<p>No records found</p>";
-  }
-
-  data.forEach(p=>{
-    html += `
-    <div class="patient">
-      👤 ${p.name}<br>
-      🦠 ${p.disease}<br>
-      📅 ${p.date}
+<div class="container">
+    <!-- 1st SCREEN: SELECTION -->
+    <div id="screen-home" class="page active hero">
+        <h1>🏥 Kalpana Skin Clinic</h1>
+        <p style="color: var(--text-muted);">Digital Dermatology Management System</p>
+        <div class="btn-group">
+            <button class="btn-primary" onclick="navigateTo('screen-patient')">I am a Patient</button>
+            <button class="btn-outline" onclick="navigateTo('screen-login')">I am a Doctor</button>
+        </div>
     </div>
-    `;
-  });
 
-  html += `<button onclick="closePopup()">❌ Close</button>`;
+    <!-- 2nd SCREEN: PATIENT FORM -->
+    <div id="screen-patient" class="page">
+        <div class="card" style="max-width: 600px; margin: auto;">
+            <h2 style="margin-top:0">Patient Registration</h2>
+            <label style="color: var(--text-muted)">Full Name</label>
+            <input type="text" id="p-name" placeholder="E.g. John Doe">
+            
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div>
+                    <label style="color: var(--text-muted)">Age</label>
+                    <input type="number" id="p-age" placeholder="Age">
+                </div>
+                <div>
+                    <label style="color: var(--text-muted)">Severity</label>
+                    <select id="p-severity">
+                        <option value="Low">Low</option>
+                        <option value="Medium">Medium</option>
+                        <option value="High">High (Urgent)</option>
+                    </select>
+                </div>
+            </div>
 
-  output.innerHTML = html;
-  popup.style.display="flex";
-}
+            <label style="color: var(--text-muted)">Current Symptoms</label>
+            <select id="p-symptom">
+                <option value="General">Select Main Issue...</option>
+                <option value="Acne">Persistent Acne / Pimples</option>
+                <option value="Fungal">Itchy Red Rings (Fungal)</option>
+                <option value="Eczema">Dry / Cracked / Inflamed Skin</option>
+            </select>
 
-/* PDF */
-window.download = function(){
-  window.print();
-}
+            <button class="btn-primary" style="width:100%" onclick="processPatient()">Generate Prescription</button>
+            <button class="btn-outline" style="width:100%; margin-top: 10px;" onclick="navigateTo('screen-home')">Back</button>
+        </div>
+    </div>
 
-/* CLOSE */
-window.closePopup = function(){
-  popup.style.display="none";
-  location.reload();
-}
+    <!-- 3rd SCREEN: DOCTOR LOGIN -->
+    <div id="screen-login" class="page">
+        <div class="card" style="max-width: 400px; margin: auto; text-align: center;">
+            <h2 style="margin-top:0">Doctor Portal</h2>
+            <input type="text" id="login-user" placeholder="Username">
+            <input type="password" id="login-pass" placeholder="Password">
+            <button class="btn-primary" style="width:100%" onclick="handleLogin()">Login</button>
+            <button class="btn-outline" style="width:100%; margin-top: 10px;" onclick="navigateTo('screen-home')">Back</button>
+        </div>
+    </div>
 
-}
+    <!-- 4th SCREEN: DASHBOARD -->
+    <div id="screen-dashboard" class="page">
+        <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+            <h2>👨‍⚕️ Welcome, Dr. Kalpana</h2>
+            <button class="btn-outline" onclick="logout()">Logout</button>
+        </div>
 
+        <div class="stat-grid" id="stats-container"></div>
+
+        <div class="card">
+            <h3>Recent Consultations</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Patient</th>
+                        <th>Diagnosis</th>
+                        <th>Priority</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="patient-list"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL: PRESCRIPTION POPUP -->
+<div id="modal-rx" class="modal-overlay">
+    <div class="modal-content">
+        <div style="padding: 20px;">
+            <div id="rx-print-area">
+                <div style="border-bottom: 3px solid #111; padding-bottom: 10px; margin-bottom: 20px;">
+                    <h1 style="color:#2563eb; margin:0; font-size: 24px;">KALPANA SKIN CLINIC</h1>
+                    <p style="margin:0; font-weight: bold; font-size: 18px;">Dr. Mrs. Kalpana Bharath</p>
+                    <p style="margin:0; font-size: 12px; color: #555;">Dermatologist & Cosmetologist</p>
+                </div>
+                <div id="rx-content" style="min-height: 250px;"></div>
+                <div style="margin-top: 30px; text-align: right; border-top: 1px solid #eee; padding-top: 10px;">
+                    <p style="font-size: 14px;">Authorized Signature</p>
+                </div>
+            </div>
+        </div>
+        <div style="padding: 20px; background: #111; text-align: right; border-top: 1px solid var(--border);">
+            <button class="btn-primary" onclick="downloadPrescription()">Download PDF</button>
+            <button class="btn-outline" onclick="closeModals()">Close</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL: DOCTOR VIEW DETAILS -->
+<div id="modal-details" class="modal-overlay">
+    <div class="modal-content" style="padding: 30px;">
+        <div id="detail-content"></div>
+        <button class="btn-primary" style="margin-top:20px; width:100%" onclick="closeModals()">Close Details</button>
+    </div>
+</div>
+
+<script>
+    function navigateTo(id) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+    }
+
+    function processPatient() {
+        const name = document.getElementById('p-name').value.trim();
+        const age = document.getElementById('p-age').value;
+        const severity = document.getElementById('p-severity').value;
+        const symptom = document.getElementById('p-symptom').value;
+
+        if(!name || !age) return alert("Please fill in all details");
+
+        const diagMap = { "Acne": "Acne Vulgaris", "Fungal": "Tinea (Fungal Infection)", "Eczema": "Atopic Dermatitis", "General": "Skin Consultation" };
+        const diagnosis = diagMap[symptom];
+        const date = new Date().toLocaleDateString();
+
+        const data = JSON.parse(localStorage.getItem('clinic_data') || '[]');
+        const pId = Date.now();
+        data.push({ name, age, severity, symptom, diagnosis, date, id: pId });
+        localStorage.setItem('clinic_data', JSON.stringify(data));
+
+        document.getElementById('rx-content').innerHTML = `
+            <p><b>Date:</b> ${date}</p>
+            <p><b>Patient:</b> ${name} (${age} Years)</p>
+            <p><b>Diagnosis:</b> ${diagnosis}</p>
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
+            <p><b>Advice:</b><br>
+            • Apply medication only on affected areas.<br>
+            • Avoid sun exposure and use SPF 30+ sunscreen.<br>
+            • Use a soap-free cleanser for the face.</p>
+        `;
+        document.getElementById('modal-rx').style.display = 'flex';
+    }
+
+    function handleLogin() {
+        if(document.getElementById('login-user').value === "Kalpana" && 
+           document.getElementById('login-pass').value === "Project") {
+            loadDashboard();
+            navigateTo('screen-dashboard');
+        } else {
+            alert("Incorrect Credentials");
+        }
+    }
+
+    function loadDashboard() {
+        const data = JSON.parse(localStorage.getItem('clinic_data') || '[]');
+        const today = new Date().toLocaleDateString();
+        const todayData = data.filter(p => p.date === today);
+
+        const counts = { Low: 0, Medium: 0, High: 0 };
+        todayData.forEach(p => counts[p.severity]++);
+
+        document.getElementById('stats-container').innerHTML = `
+            <div class="stat-card"><div class="stat-val">${todayData.length}</div>Patients Today</div>
+            <div class="stat-card" style="border-top: 3px solid var(--success)"><div class="stat-val">${counts.Low}</div>Low Priority</div>
+            <div class="stat-card" style="border-top: 3px solid orange"><div class="stat-val">${counts.Medium}</div>Medium</div>
+            <div class="stat-card" style="border-top: 3px solid var(--danger)"><div class="stat-val">${counts.High}</div>Urgent</div>
+        `;
+
+        const recent = data.slice(-5).reverse();
+        document.getElementById('patient-list').innerHTML = recent.map(p => `
+            <tr>
+                <td><b>${p.name}</b></td>
+                <td>${p.diagnosis}</td>
+                <td><span style="color:${p.severity === 'High' ? 'var(--danger)' : 'var(--text-main)'}">${p.severity}</span></td>
+                <td><button onclick="showDetails(${p.id})" style="padding:5px 10px; font-size:12px;" class="btn-outline">Full Details</button></td>
+            </tr>
+        `).join('') || "<tr><td colspan='4'>No records yet</td></tr>";
+    }
+
+    function showDetails(id) {
+        const p = JSON.parse(localStorage.getItem('clinic_data')).find(x => x.id === id);
+        document.getElementById('detail-content').innerHTML = `
+            <h2 style="color:var(--primary); margin-top:0">Patient Record</h2>
+            <p><b>Name:</b> ${p.name}</p>
+            <p><b>Age:</b> ${p.age}</p>
+            <p><b>Severity:</b> ${p.severity}</p>
+            <p><b>Main Issue:</b> ${p.symptom}</p>
+            <p><b>Diagnosis:</b> ${p.diagnosis}</p>
+            <p><b>Visit Date:</b> ${p.date}</p>
+        `;
+        document.getElementById('modal-details').style.display = 'flex';
+    }
+
+    function closeModals() {
+        document.querySelectorAll('.modal-overlay').forEach(m => m.style.display = 'none');
+    }
+
+    function downloadPrescription() {
+        const element = document.getElementById('rx-print-area');
+        html2pdf().from(element).save('Prescription.pdf');
+    }
+
+    function logout() {
+        navigateTo('screen-home');
+        document.getElementById('login-pass').value = "";
+    }
 </script>
+
+</body>
+</html>
